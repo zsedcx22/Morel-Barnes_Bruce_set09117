@@ -5,8 +5,77 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Checkers"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="627.083" Width="805.73">
     <Grid>
-        
+        <Button x:Name="A1" Content="" HorizontalAlignment="Left" Margin="200,95,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="A2" Content="O" HorizontalAlignment="Left" Margin="249,95,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Green" Click="Button_Click"/>
+        <Button x:Name="A3" Content="" HorizontalAlignment="Left" Margin="298,95,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="A4" Content="O" HorizontalAlignment="Left" Margin="347,95,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Green" Click="Button_Click"/>
+        <Button x:Name="A5" Content="" HorizontalAlignment="Left" Margin="396,95,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="A6" Content="O" HorizontalAlignment="Left" Margin="445,95,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Green" Click="Button_Click"/>
+        <Button x:Name="A7" Content="" HorizontalAlignment="Left" Margin="494,95,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="A8" Content="O" HorizontalAlignment="Left" Margin="543,95,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Green" Click="Button_Click"/>
+        <Button x:Name="B1" Content="O" HorizontalAlignment="Left" Margin="200,150,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Green" Click="Button_Click"/>
+        <Button x:Name="B2" Content="" HorizontalAlignment="Left" Margin="249,150,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="B3" Content="O" HorizontalAlignment="Left" Margin="298,150,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Green" Click="Button_Click"/>
+        <Button x:Name="B4" Content="" HorizontalAlignment="Left" Margin="347,150,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="B5" Content="O" HorizontalAlignment="Left" Margin="396,150,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Green" Click="Button_Click"/>
+        <Button x:Name="B6" Content="" HorizontalAlignment="Left" Margin="445,150,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="B7" Content="O" HorizontalAlignment="Left" Margin="494,150,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Green" Click="Button_Click"/>
+        <Button x:Name="B8" Content="" HorizontalAlignment="Left" Margin="543,150,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="C1" Content="" HorizontalAlignment="Left" Margin="200,205,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="C2" Content="O" HorizontalAlignment="Left" Margin="249,205,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Green" Click="Button_Click"/>
+        <Button x:Name="C3" Content="" HorizontalAlignment="Left" Margin="298,205,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="C4" Content="O" HorizontalAlignment="Left" Margin="347,205,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Green" Click="Button_Click"/>
+        <Button x:Name="C5" Content="" HorizontalAlignment="Left" Margin="396,205,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="C6" Content="O" HorizontalAlignment="Left" Margin="445,205,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Green" Click="Button_Click"/>
+        <Button x:Name="C7" Content="" HorizontalAlignment="Left" Margin="494,205,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="C8" Content="O" HorizontalAlignment="Left" Margin="543,205,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Green" Click="Button_Click"/>
+        <Button x:Name="D1" Content="" HorizontalAlignment="Left" Margin="200,260,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="White" Click="Button_Click"/>
+        <Button x:Name="D2" Content="" HorizontalAlignment="Left" Margin="249,260,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="D3" Content="" HorizontalAlignment="Left" Margin="298,260,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="White" Click="Button_Click"/>
+        <Button x:Name="D4" Content="" HorizontalAlignment="Left" Margin="347,260,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="D5" Content="" HorizontalAlignment="Left" Margin="396,260,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="White" Click="Button_Click"/>
+        <Button x:Name="D6" Content="" HorizontalAlignment="Left" Margin="445,260,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="D7" Content="" HorizontalAlignment="Left" Margin="494,260,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="White" Click="Button_Click"/>
+        <Button x:Name="D8" Content="" HorizontalAlignment="Left" Margin="543,260,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="E1" Content="" HorizontalAlignment="Left" Margin="200,315,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="E2" Content="" HorizontalAlignment="Left" Margin="249,315,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="White" Click="Button_Click"/>
+        <Button x:Name="E3" Content="" HorizontalAlignment="Left" Margin="298,315,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="E4" Content="" HorizontalAlignment="Left" Margin="347,315,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="White" Click="Button_Click"/>
+        <Button x:Name="E5" Content="" HorizontalAlignment="Left" Margin="396,315,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="E6" Content="" HorizontalAlignment="Left" Margin="445,315,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="White" Click="Button_Click"/>
+        <Button x:Name="E7" Content="" HorizontalAlignment="Left" Margin="494,315,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="E8" Content="" HorizontalAlignment="Left" Margin="543,315,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="White" Click="Button_Click"/>
+        <Button x:Name="F1" Content="O" HorizontalAlignment="Left" Margin="200,370,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Red" Click="Button_Click"/>
+        <Button x:Name="F2" Content="" HorizontalAlignment="Left" Margin="249,370,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="F3" Content="O" HorizontalAlignment="Left" Margin="298,370,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Red" Click="Button_Click"/>
+        <Button x:Name="F4" Content="" HorizontalAlignment="Left" Margin="347,370,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="F5" Content="O" HorizontalAlignment="Left" Margin="396,370,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Red" Click="Button_Click"/>
+        <Button x:Name="F6" Content="" HorizontalAlignment="Left" Margin="445,370,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="F7" Content="O" HorizontalAlignment="Left" Margin="494,370,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Red" Click="Button_Click"/>
+        <Button x:Name="F8" Content="" HorizontalAlignment="Left" Margin="543,370,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="G1" Content="" HorizontalAlignment="Left" Margin="200,425,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="G2" Content="O" HorizontalAlignment="Left" Margin="249,425,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Red" Click="Button_Click"/>
+        <Button x:Name="G3" Content="" HorizontalAlignment="Left" Margin="298,425,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="G4" Content="O" HorizontalAlignment="Left" Margin="347,425,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Red" Click="Button_Click"/>
+        <Button x:Name="G5" Content="" HorizontalAlignment="Left" Margin="396,425,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="G6" Content="O" HorizontalAlignment="Left" Margin="445,425,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Red" Click="Button_Click"/>
+        <Button x:Name="G7" Content="" HorizontalAlignment="Left" Margin="494,425,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="G8" Content="O" HorizontalAlignment="Left" Margin="543,425,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Red" Click="Button_Click"/>
+        <Button x:Name="H1" Content="O" HorizontalAlignment="Left" Margin="200,480,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Red" Click="Button_Click"/>
+        <Button x:Name="H2" Content="" HorizontalAlignment="Left" Margin="249,480,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="H3" Content="O" HorizontalAlignment="Left" Margin="298,480,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Red" Click="Button_Click"/>
+        <Button x:Name="H4" Content="" HorizontalAlignment="Left" Margin="347,480,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="H5" Content="O" HorizontalAlignment="Left" Margin="396,480,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Red" Click="Button_Click"/>
+        <Button x:Name="H6" Content="" HorizontalAlignment="Left" Margin="445,480,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="H7" Content="O" HorizontalAlignment="Left" Margin="494,480,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="Black" FontSize="24" Foreground="Red" Click="Button_Click"/>
+        <Button x:Name="H8" Content="" HorizontalAlignment="Left" Margin="543,480,0,0" VerticalAlignment="Top" Width="44" Height="50" Background="White" FontSize="24" Click="Button_Click"/>
+        <Button x:Name="saveReplay" Content="Save Replay" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="loadReplay" Content="Load Replay" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="playReplay" Content="Play Replay" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="vsAI" Content="AI Toggle" HorizontalAlignment="Left" Margin="665,23,0,0" VerticalAlignment="Top" Width="105" Height="45" Click="vsAI_Click"/>
+        <Label x:Name="aiNotice" Content="" HorizontalAlignment="Left" Margin="347,50,0,0" VerticalAlignment="Top" Width="93"/>
+
     </Grid>
 </Window>
