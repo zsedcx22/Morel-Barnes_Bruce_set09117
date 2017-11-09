@@ -76,6 +76,7 @@
         <Button x:Name="playReplay" Content="Play Replay" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top" Width="75"/>
         <Button x:Name="vsAI" Content="AI Toggle" HorizontalAlignment="Left" Margin="665,23,0,0" VerticalAlignment="Top" Width="105" Height="45" Click="vsAI_Click"/>
         <Label x:Name="aiNotice" Content="" HorizontalAlignment="Left" Margin="347,50,0,0" VerticalAlignment="Top" Width="93"/>
+        <Button x:Name="tempSet" Content="SET RED" HorizontalAlignment="Left" Margin="665,100,0,0" VerticalAlignment="Top" Width="105" Height="45" Click="tempSet_Click"/>
 
     </Grid>
 </Window>
