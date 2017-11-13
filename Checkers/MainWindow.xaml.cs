@@ -41,21 +41,17 @@ namespace Checkers
         private List<Button> greenPieces = new List<Button>();
         private List<Button> greenYellow = new List<Button>();
         private List<Button> greenMoveable = new List<Button>();
+        private List<Button> greenBlue = new List<Button>();
 
         private bool redSwitch = false;
         private List<Button> redPieces = new List<Button>();
         private List<Button> redYellow = new List<Button>();
         private List<Button> redMoveable = new List<Button>();
-
-
+        private List<Button> redBlue = new List<Button>();
 
         private void clickMethod(Button button)
         {
             string bName = button.Name;
-            string diagName1 = "";
-            string diagName2 = "";
-
-
             if (button.Background == Brushes.Yellow)
             {
                 blueExists = false;
@@ -67,6 +63,7 @@ namespace Checkers
                     char y = (char)((last.Name[1] + button.Name[1]) / 2);
                     Button remove = (Button)FindName(x.ToString() + y.ToString());
                     remove.Content = "";
+                    remove.Foreground = Brushes.Black;
                     if (redPieces.Contains(remove))
                     {
                         redPieces.Remove(remove);
@@ -77,14 +74,17 @@ namespace Checkers
                     }
                     lastBlue = true;
                 }
+
                 foreach (Button piece in redPieces)
                 {
                     piece.Background = Brushes.Black;
                 }
+
                 foreach (Button piece in greenPieces)
                 {
                     piece.Background = Brushes.Black;
                 }
+
                 if (button.Name[0] == 'A' || button.Name[0] == 'H')
                 {
                     button.Content = "K";
@@ -93,17 +93,18 @@ namespace Checkers
                 {
                     button.Content = last.Content;
                 }
+
                 button.Foreground = last.Foreground;
                 button.Background = last.Background;
                 last.Foreground = Brushes.Black;
                 last.Content = "";
-                if (button.Foreground == Brushes.Red)
+                if (redPieces.Contains(last))
                 {
                     redPieces.Remove(last);
                     redPieces.Add(button);
                 }
 
-                if (button.Foreground == Brushes.Green)
+                if (greenPieces.Contains(last))
                 {
                     greenPieces.Remove(last);
                     greenPieces.Add(button);
@@ -134,6 +135,10 @@ namespace Checkers
                                         dat.Background = Brushes.Yellow;
                                         last = button;
                                         diag1 = dat;
+                                        if (redSwitch == true)
+                                        {
+                                            redBlue.Add(button);
+                                        }
                                     }
                                 }
                             }
@@ -159,6 +164,10 @@ namespace Checkers
                                         dat.Background = Brushes.Yellow;
                                         last = button;
                                         diag2 = dat;
+                                        if (redSwitch == true)
+                                        {
+                                            redBlue.Add(button);
+                                        }
                                     }
                                 }
                             }
@@ -185,6 +194,10 @@ namespace Checkers
                                             dat.Background = Brushes.Yellow;
                                             last = button;
                                             diag3 = dat;
+                                            if (redSwitch == true)
+                                            {
+                                                redBlue.Add(button);
+                                            }
                                         }
                                     }
                                 }
@@ -210,28 +223,30 @@ namespace Checkers
                                             dat.Background = Brushes.Yellow;
                                             last = button;
                                             diag4 = dat;
+                                            if (redSwitch == true)
+                                            {
+                                                redBlue.Add(button);
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                    else if (button.Foreground == Brushes.Green)
+                    else if (greenPieces.Contains(button))
                     {
                         char tmp1 = button.Name[0];
                         char tmp2 = button.Name[1];
                         tmp1++;
                         tmp2++;
-                        string full = tmp1.ToString() + tmp2.ToString();
-                        Button tmp = (Button)FindName(full);
+                        Button tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                         if (tmp != null)
                         {
                             if (redPieces.Contains(tmp))
                             {
                                 tmp1++;
                                 tmp2++;
-                                full = tmp1.ToString() + tmp2.ToString();
-                                Button dat = (Button)FindName(full);
+                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                                 if (dat != null)
                                 {
                                     if (dat.Content.ToString() == "")
@@ -240,6 +255,10 @@ namespace Checkers
                                         dat.Background = Brushes.Yellow;
                                         last = button;
                                         diag1 = dat;
+                                        if (greenSwitch == true)
+                                        {
+                                            greenBlue.Add(button);
+                                        }
                                     }
                                 }
                             }
@@ -249,16 +268,14 @@ namespace Checkers
                         tmp2 = button.Name[1];
                         tmp1++;
                         tmp2--;
-                        full = tmp1.ToString() + tmp2.ToString();
-                        tmp = (Button)FindName(full);
+                        tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                         if (tmp != null)
                         {
                             if (redPieces.Contains(tmp))
                             {
                                 tmp1++;
                                 tmp2--;
-                                full = tmp1.ToString() + tmp2.ToString();
-                                Button dat = (Button)FindName(full);
+                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                                 if (dat != null)
                                 {
                                     if (dat.Content.ToString() == "")
@@ -267,6 +284,10 @@ namespace Checkers
                                         dat.Background = Brushes.Yellow;
                                         last = button;
                                         diag2 = dat;
+                                        if (greenSwitch == true)
+                                        {
+                                            greenBlue.Add(button);
+                                        }
                                     }
                                 }
                             }
@@ -277,16 +298,14 @@ namespace Checkers
                             tmp2 = button.Name[1];
                             tmp1--;
                             tmp2--;
-                            full = tmp1.ToString() + tmp2.ToString();
-                            tmp = (Button)FindName(full);
+                            tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                             if (tmp != null)
                             {
                                 if (redPieces.Contains(tmp))
                                 {
                                     tmp1--;
                                     tmp2--;
-                                    full = tmp1.ToString() + tmp2.ToString();
-                                    Button dat = (Button)FindName(full);
+                                    Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                                     if (dat != null)
                                     {
                                         if (dat.Content.ToString() == "")
@@ -295,6 +314,10 @@ namespace Checkers
                                             dat.Background = Brushes.Yellow;
                                             last = button;
                                             diag3 = dat;
+                                            if (greenSwitch == true)
+                                            {
+                                                greenBlue.Add(button);
+                                            }
                                         }
                                     }
                                 }
@@ -304,16 +327,14 @@ namespace Checkers
                             tmp2 = button.Name[1];
                             tmp1--;
                             tmp2++;
-                            full = tmp1.ToString() + tmp2.ToString();
-                            tmp = (Button)FindName(full);
+                            tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                             if (tmp != null)
                             {
                                 if (redPieces.Contains(tmp))
                                 {
                                     tmp1--;
                                     tmp2++;
-                                    full = tmp1.ToString() + tmp2.ToString();
-                                    Button dat = (Button)FindName(full);
+                                    Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                                     if (dat != null)
                                     {
                                         if (dat.Content.ToString() == "")
@@ -322,6 +343,10 @@ namespace Checkers
                                             dat.Background = Brushes.Yellow;
                                             last = button;
                                             diag4 = dat;
+                                            if (greenSwitch == true)
+                                            {
+                                                greenBlue.Add(button);
+                                            }
                                         }
                                     }
                                 }
@@ -335,13 +360,32 @@ namespace Checkers
                         extraJump = true;
                     }
                 }
-                
+
                 if (diag1 != null)
                 {
                     if (diag2 != null)
                     {
-                        diag1.Background = Brushes.Black;
-                        diag2.Background = Brushes.Black;
+                        if (diag3 != null)
+                        {
+                            if (diag4 != null)
+                            {
+                                diag1.Background = Brushes.Black;
+                                diag2.Background = Brushes.Black;
+                                diag3.Background = Brushes.Black;
+                                diag4.Background = Brushes.Black;
+                            }
+                            else
+                            {
+                                diag1.Background = Brushes.Black;
+                                diag2.Background = Brushes.Black;
+                                diag3.Background = Brushes.Black;
+                            }
+                        }
+                        else
+                        {
+                            diag1.Background = Brushes.Black;
+                            diag2.Background = Brushes.Black;
+                        }
                     }
                     else
                     {
@@ -356,32 +400,31 @@ namespace Checkers
                 }*/
                 diag1 = null;
                 diag2 = null;
+                diag3 = null;
+                diag4 = null;
                 if (extraJump == false)
                 {
                     turn++;
                 }
                 lastBlue = false;
 
-
-
                 if (greenSwitch == true && button.Foreground == Brushes.Red)
                 {
                     ComputerAction();
-                }
-                else if (greenSwitch == true && button.Foreground == Brushes.Green)
-                {
-                    greenPieces.Remove(last);
-                    greenPieces.Add(button);
+                    greenBlue = new List<Button>();
                 }
 
-                if (redSwitch == true && button.Foreground == Brushes.Green)
+                if (greenPieces.Count == 0)
                 {
-                    ComputerAction();
+                    MessageBox.Show("Red Wins!");
+                    greenSwitch = false;
+                    redSwitch = false;
                 }
-                else if (redSwitch == true && button.Foreground == Brushes.Red)
+                else if (redPieces.Count == 0)
                 {
-                    redPieces.Remove(last);
-                    redPieces.Add(button);
+                    MessageBox.Show("Green Wins!");
+                    greenSwitch = false;
+                    redSwitch = false;
                 }
             }
             else if (button.Background == Brushes.Blue) //BLUE IS FOR TAKING
@@ -405,8 +448,11 @@ namespace Checkers
                                 if (dat.Content.ToString() == "")
                                 {
                                     dat.Background = Brushes.Yellow;
-                                    last = button;
                                     diag1 = dat;
+                                    if (redSwitch == true)
+                                    {
+                                        redYellow.Add(dat);
+                                    }
                                 }
                             }
                         }
@@ -429,8 +475,11 @@ namespace Checkers
                                 if (dat.Content.ToString() == "")
                                 {
                                     dat.Background = Brushes.Yellow;
-                                    last = button;
                                     diag2 = dat;
+                                    if (redSwitch == true)
+                                    {
+                                        redYellow.Add(dat);
+                                    }
                                 }
                             }
                         }
@@ -454,8 +503,11 @@ namespace Checkers
                                     if (dat.Content.ToString() == "")
                                     {
                                         dat.Background = Brushes.Yellow;
-                                        last = button;
                                         diag3 = dat;
+                                        if (redSwitch == true)
+                                        {
+                                            redYellow.Add(dat);
+                                        }
                                     }
                                 }
                             }
@@ -478,37 +530,46 @@ namespace Checkers
                                     if (dat.Content.ToString() == "")
                                     {
                                         dat.Background = Brushes.Yellow;
-                                        last = button;
                                         diag4 = dat;
+                                        if (redSwitch == true)
+                                        {
+                                            redYellow.Add(dat);
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                    last = button;
+                    if (redSwitch == true)
+                    {
+                        ComputerPlace();
+                    }
                 }
-                else if (button.Foreground == Brushes.Green)
-                {
+                else if (greenPieces.Contains(button)) //if green
+                { //change part of this for cpu to "click" the yellow part
                     char tmp1 = button.Name[0];
                     char tmp2 = button.Name[1];
                     tmp1++;
                     tmp2++;
-                    string full = tmp1.ToString() + tmp2.ToString();
-                    Button tmp = (Button)FindName(full);
+                    Button tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                     if (tmp != null)
                     {
                         if (redPieces.Contains(tmp))
                         {
                             tmp1++;
                             tmp2++;
-                            full = tmp1.ToString() + tmp2.ToString();
-                            Button dat = (Button)FindName(full);
+                            Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                             if (dat != null)
                             {
                                 if (dat.Content.ToString() == "")
                                 {
                                     dat.Background = Brushes.Yellow;
-                                    last = button;
                                     diag1 = dat;
+                                    if (greenSwitch == true)
+                                    {
+                                        greenYellow.Add(dat);
+                                    }
                                 }
                             }
                         }
@@ -518,23 +579,24 @@ namespace Checkers
                     tmp2 = button.Name[1];
                     tmp1++;
                     tmp2--;
-                    full = tmp1.ToString() + tmp2.ToString();
-                    tmp = (Button)FindName(full);
+                    tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                     if (tmp != null)
                     {
                         if (redPieces.Contains(tmp))
                         {
                             tmp1++;
                             tmp2--;
-                            full = tmp1.ToString() + tmp2.ToString();
-                            Button dat = (Button)FindName(full);
+                            Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                             if (dat != null)
                             {
                                 if (dat.Content.ToString() == "")
                                 {
                                     dat.Background = Brushes.Yellow;
-                                    last = button;
                                     diag2 = dat;
+                                    if (greenSwitch == true)
+                                    {
+                                        greenYellow.Add(dat);
+                                    }
                                 }
                             }
                         }
@@ -545,23 +607,24 @@ namespace Checkers
                         tmp2 = button.Name[1];
                         tmp1--;
                         tmp2--;
-                        full = tmp1.ToString() + tmp2.ToString();
-                        tmp = (Button)FindName(full);
+                        tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                         if (tmp != null)
                         {
                             if (redPieces.Contains(tmp))
                             {
                                 tmp1--;
                                 tmp2--;
-                                full = tmp1.ToString() + tmp2.ToString();
-                                Button dat = (Button)FindName(full);
+                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                                 if (dat != null)
                                 {
                                     if (dat.Content.ToString() == "")
                                     {
                                         dat.Background = Brushes.Yellow;
-                                        last = button;
                                         diag3 = dat;
+                                        if (greenSwitch == true)
+                                        {
+                                            greenYellow.Add(dat);
+                                        }
                                     }
                                 }
                             }
@@ -571,27 +634,33 @@ namespace Checkers
                         tmp2 = button.Name[1];
                         tmp1--;
                         tmp2++;
-                        full = tmp1.ToString() + tmp2.ToString();
-                        tmp = (Button)FindName(full);
+                        tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                         if (tmp != null)
                         {
                             if (redPieces.Contains(tmp))
                             {
                                 tmp1--;
                                 tmp2++;
-                                full = tmp1.ToString() + tmp2.ToString();
-                                Button dat = (Button)FindName(full);
+                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                                 if (dat != null)
                                 {
                                     if (dat.Content.ToString() == "")
                                     {
                                         dat.Background = Brushes.Yellow;
-                                        last = button;
                                         diag4 = dat;
+                                        if (greenSwitch == true)
+                                        {
+                                            greenYellow.Add(dat);
+                                        }
                                     }
                                 }
                             }
                         }
+                    }
+                    last = button;
+                    if (greenSwitch == true)
+                    {
+                        ComputerPlace();
                     }
                 }
             }
@@ -605,21 +674,20 @@ namespace Checkers
                         char tmp2 = piece.Name[1];
                         tmp1++;
                         tmp2++;
-                        string full = tmp1.ToString() + tmp2.ToString();
-                        Button tmp = (Button)FindName(full);
+                        Button tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                         if (tmp != null)
                         {
                             if (redPieces.Contains(tmp))
                             {
                                 tmp1++;
                                 tmp2++;
-                                full = tmp1.ToString() + tmp2.ToString();
-                                Button dat = (Button)FindName(full);
+                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                                 if (dat != null)
                                 {
                                     if (dat.Content.ToString() == "")
                                     {
                                         piece.Background = Brushes.Blue;
+                                        greenBlue.Add(piece); //computer player not choosing blue square, just choosing square then being checked, make separate check for computer player mb?
                                         blueExists = true;
                                     }
                                 }
@@ -630,21 +698,20 @@ namespace Checkers
                         tmp2 = piece.Name[1];
                         tmp1++;
                         tmp2--;
-                        full = tmp1.ToString() + tmp2.ToString();
-                        tmp = (Button)FindName(full);
+                        tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                         if (tmp != null)
                         {
                             if (redPieces.Contains(tmp))
                             {
                                 tmp1++;
                                 tmp2--;
-                                full = tmp1.ToString() + tmp2.ToString();
-                                Button dat = (Button)FindName(full);
+                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                                 if (dat != null)
                                 {
                                     if (dat.Content.ToString() == "")
                                     {
                                         piece.Background = Brushes.Blue;
+                                        greenBlue.Add(piece);
                                         blueExists = true;
                                     }
                                 }
@@ -656,21 +723,20 @@ namespace Checkers
                             tmp2 = piece.Name[1];
                             tmp1--;
                             tmp2--;
-                            full = tmp1.ToString() + tmp2.ToString();
-                            tmp = (Button)FindName(full);
+                            tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                             if (tmp != null)
                             {
                                 if (redPieces.Contains(tmp))
                                 {
                                     tmp1--;
                                     tmp2--;
-                                    full = tmp1.ToString() + tmp2.ToString();
-                                    Button dat = (Button)FindName(full);
+                                    Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                                     if (dat != null)
                                     {
                                         if (dat.Content.ToString() == "")
                                         {
                                             piece.Background = Brushes.Blue;
+                                            greenBlue.Add(piece);
                                             blueExists = true;
                                         }
                                     }
@@ -681,21 +747,20 @@ namespace Checkers
                             tmp2 = piece.Name[1];
                             tmp1--;
                             tmp2++;
-                            full = tmp1.ToString() + tmp2.ToString();
-                            tmp = (Button)FindName(full);
+                            tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                             if (tmp != null)
                             {
                                 if (redPieces.Contains(tmp))
                                 {
                                     tmp1--;
                                     tmp2++;
-                                    full = tmp1.ToString() + tmp2.ToString();
-                                    Button dat = (Button)FindName(full);
+                                    Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
                                     if (dat != null)
                                     {
                                         if (dat.Content.ToString() == "")
                                         {
                                             piece.Background = Brushes.Blue;
+                                            greenBlue.Add(piece);
                                             blueExists = true;
                                         }
                                     }
@@ -711,7 +776,14 @@ namespace Checkers
                         }
                         else
                         {
-                            MessageBox.Show("You must select a piece with a blue background as you must take a piece.");
+                            if (greenSwitch == true)
+                            {
+                                ComputerAction();
+                            }
+                            else
+                            {
+                                MessageBox.Show("You must select a piece with a blue background as you must take a piece.");
+                            }
                         }
                     }
                 }
@@ -726,8 +798,27 @@ namespace Checkers
                     {
                         if (diag2 != null)
                         {
-                            diag1.Background = Brushes.Black;
-                            diag2.Background = Brushes.Black;
+                            if (diag3 != null)
+                            {
+                                if (diag4 != null)
+                                {
+                                    diag1.Background = Brushes.Black;
+                                    diag2.Background = Brushes.Black;
+                                    diag3.Background = Brushes.Black;
+                                    diag4.Background = Brushes.Black;
+                                }
+                                else
+                                {
+                                    diag1.Background = Brushes.Black;
+                                    diag2.Background = Brushes.Black;
+                                    diag3.Background = Brushes.Black;
+                                }
+                            }
+                            else
+                            {
+                                diag1.Background = Brushes.Black;
+                                diag2.Background = Brushes.Black;
+                            }
                         }
                         else
                         {
@@ -736,87 +827,87 @@ namespace Checkers
                     }
                     diag1 = null;
                     diag2 = null;
+                    diag3 = null;
+                    diag4 = null;
 
                     char temp1 = bName[0];
                     int temp2 = (int)Char.GetNumericValue(bName[1]);
-
                     temp1++;
                     temp2--;
-                    diagName1 = temp1.ToString() + temp2;
-
-                    temp2++;
-                    temp2++;
-                    diagName2 = temp1.ToString() + temp2;
-
-                    Button correct1 = (Button)FindName(diagName1);
-                    if (correct1 != null)
+                    diag1 = (Button)FindName(temp1.ToString() + temp2);
+                    if (diag1 != null)
                     {
-                        if (correct1.Content.ToString() == "" && correct1.Background != Brushes.Yellow)
+                        if (diag1.Content.ToString() == "" && diag1.Background != Brushes.Yellow)
                         {
-                            correct1.Background = Brushes.Yellow;
-                            greenYellow.Add(correct1);
-                        }
-                        else if (correct1.Content.ToString() != "" && correct1.Background != Brushes.Yellow && correct1.Foreground == Brushes.Red)
-                        {
-                            temp1 = bName[0];
-                            temp2 = (int)Char.GetNumericValue(bName[1]);
-                            temp1++;
-                            temp1++;
-                            temp2--;
-                            temp2--;
-                            diagName1 = temp1.ToString() + temp2;
-                            Button reality = (Button)FindName(diagName1);
-                            if (reality != null)
-                            {
-                                if (reality.Content.ToString() == "" && reality.Background != Brushes.Yellow)
-                                {
-                                    reality.Background = Brushes.Yellow;
-                                    greenYellow.Add(reality);
-                                }
-                            }
+                            diag1.Background = Brushes.Yellow;
+                            greenYellow.Add(diag1);
                         }
                         else
                         {
-                            correct1.Background = Brushes.Black;
+                            diag1.Background = Brushes.Black;
                         }
                     }
 
-                    Button correct2 = (Button)FindName(diagName2);
-                    if (correct2 != null)
+                    temp1 = bName[0];
+                    temp2 = (int)Char.GetNumericValue(bName[1]);
+                    temp1++;
+                    temp2++;
+                    diag2 = (Button)FindName(temp1.ToString() + temp2);
+                    if (diag2 != null)
                     {
-                        if (correct2.Content.ToString() == "" && correct2.Background != Brushes.Yellow)
+                        if (diag2.Content.ToString() == "" && diag2.Background != Brushes.Yellow)
                         {
-                            correct2.Background = Brushes.Yellow;
-                            greenYellow.Add(correct2);
-                        }
-                        else if (correct2.Content.ToString() != "" && correct2.Background != Brushes.Yellow && correct2.Foreground == Brushes.Red)
-                        {
-                            temp1 = bName[0];
-                            temp2 = (int)Char.GetNumericValue(bName[1]);
-                            temp1++;
-                            temp2++;
-                            temp1++;
-                            temp2++;
-                            diagName2 = temp1.ToString() + temp2;
-                            Button reality = (Button)FindName(diagName2);
-                            if (reality != null)
-                            {
-                                if (reality.Content.ToString() == "" && reality.Background != Brushes.Yellow)
-                                {
-                                    reality.Background = Brushes.Yellow;
-                                    greenYellow.Add(reality);
-                                }
-                            }
+                            diag2.Background = Brushes.Yellow;
+                            greenYellow.Add(diag2);
                         }
                         else
                         {
-                            correct2.Background = Brushes.Black;
+                            diag2.Background = Brushes.Black;
                         }
-                        
+
+                    }
+
+                    if (button.Content.ToString() == "K")
+                    {
+                        temp1 = bName[0];
+                        temp2 = (int)Char.GetNumericValue(bName[1]);
+                        temp1--;
+                        temp2++;
+                        diag3 = (Button)FindName(temp1.ToString() + temp2);
+                        if (diag3 != null)
+                        {
+                            if (diag3.Content.ToString() == "" && diag3.Background != Brushes.Yellow)
+                            {
+                                diag3.Background = Brushes.Yellow;
+                                greenYellow.Add(diag3);
+                            }
+                            else
+                            {
+                                diag3.Background = Brushes.Black;
+                            }
+
+                        }
+
+                        temp1 = bName[0];
+                        temp2 = (int)Char.GetNumericValue(bName[1]);
+                        temp1--;
+                        temp2--;
+                        diag4 = (Button)FindName(temp1.ToString() + temp2);
+                        if (diag4 != null)
+                        {
+                            if (diag4.Content.ToString() == "" && diag4.Background != Brushes.Yellow)
+                            {
+                                diag4.Background = Brushes.Yellow;
+                                greenYellow.Add(diag4);
+                            }
+                            else
+                            {
+                                diag4.Background = Brushes.Black;
+                            }
+
+                        }
                     }
                     last = button;
-                    diag1 = (Button)FindName(diagName1);
-                    diag2 = (Button)FindName(diagName2);
                     if (greenSwitch == true)
                     {
                         if (greenYellow.Count != 0)
@@ -859,6 +950,7 @@ namespace Checkers
                                     if (dat.Content.ToString() == "")
                                     {
                                         piece.Background = Brushes.Blue;
+                                        redBlue.Add(piece);
                                         blueExists = true;
                                     }
                                 }
@@ -882,6 +974,7 @@ namespace Checkers
                                     if (dat.Content.ToString() == "")
                                     {
                                         piece.Background = Brushes.Blue;
+                                        redBlue.Add(piece);
                                         blueExists = true;
                                     }
                                 }
@@ -906,6 +999,7 @@ namespace Checkers
                                         if (dat.Content.ToString() == "")
                                         {
                                             piece.Background = Brushes.Blue;
+                                            redBlue.Add(piece);
                                             blueExists = true;
                                         }
                                     }
@@ -929,6 +1023,7 @@ namespace Checkers
                                         if (dat.Content.ToString() == "")
                                         {
                                             piece.Background = Brushes.Blue;
+                                            redBlue.Add(piece);
                                             blueExists = true;
                                         }
                                     }
@@ -944,7 +1039,14 @@ namespace Checkers
                         }
                         else
                         {
-                            MessageBox.Show("You must select a piece with a blue background as you must take a piece."); //error
+                            if (redSwitch == true)
+                            {
+                                ComputerAction();
+                            }
+                            else
+                            {
+                                MessageBox.Show("You must select a piece with a blue background as you must take a piece.");
+                            }
                         }
                     }
                 }
@@ -959,8 +1061,27 @@ namespace Checkers
                     {
                         if (diag2 != null)
                         {
-                            diag1.Background = Brushes.Black;
-                            diag2.Background = Brushes.Black;
+                            if (diag3 != null)
+                            {
+                                if (diag4 != null)
+                                {
+                                    diag1.Background = Brushes.Black;
+                                    diag2.Background = Brushes.Black;
+                                    diag3.Background = Brushes.Black;
+                                    diag4.Background = Brushes.Black;
+                                }
+                                else
+                                {
+                                    diag1.Background = Brushes.Black;
+                                    diag2.Background = Brushes.Black;
+                                    diag3.Background = Brushes.Black;
+                                }
+                            }
+                            else
+                            {
+                                diag1.Background = Brushes.Black;
+                                diag2.Background = Brushes.Black;
+                            }
                         }
                         else
                         {
@@ -969,111 +1090,200 @@ namespace Checkers
                     }
                     diag1 = null;
                     diag2 = null;
+                    diag3 = null;
+                    diag4 = null;
 
                     char temp1 = bName[0];
                     int temp2 = (int)Char.GetNumericValue(bName[1]);
-
                     temp1--;
                     temp2--;
-                    diagName1 = temp1.ToString() + temp2;
-
-                    temp2++;
-                    temp2++;
-                    diagName2 = temp1.ToString() + temp2;
-
-                    Button correct1 = (Button)FindName(diagName1);
-                    if (correct1 != null)
+                    diag1 = (Button)FindName(temp1.ToString() + temp2);
+                    if (diag1 != null)
                     {
-                        if (correct1.Content.ToString() == "" && correct1.Background != Brushes.Yellow)
+                        if (diag1.Content.ToString() == "" && diag1.Background != Brushes.Yellow)
                         {
-                            correct1.Background = Brushes.Yellow;
-                        }
-                        else if (correct1.Content.ToString() != "" && correct1.Background != Brushes.Yellow && correct1.Foreground == Brushes.Green)
-                        {
-                            temp1 = bName[0];
-                            temp2 = (int)Char.GetNumericValue(bName[1]);
-                            temp1--;
-                            temp1--;
-                            temp2--;
-                            temp2--;
-                            diagName1 = temp1.ToString() + temp2;
-                            Button reality = (Button)FindName(diagName1);
-                            if (reality != null)
-                            {
-                                if (reality.Content.ToString() == "" && reality.Background != Brushes.Yellow)
-                                {
-                                    reality.Background = Brushes.Yellow;
-                                }
-                            }
+                            diag1.Background = Brushes.Yellow;
+                            redYellow.Add(diag1);
                         }
                         else
                         {
-                            correct1.Background = Brushes.Black;
+                            diag1.Background = Brushes.Black;
                         }
                     }
 
-                    Button correct2 = (Button)FindName(diagName2);
-                    if (correct2 != null)
+                    temp1 = bName[0];
+                    temp2 = (int)Char.GetNumericValue(bName[1]);
+                    temp1--;
+                    temp2++;
+                    diag2 = (Button)FindName(temp1.ToString() + temp2);
+                    if (diag2 != null)
                     {
-                        if (correct2.Content.ToString() == "" && correct2.Background != Brushes.Yellow)
+                        if (diag2.Content.ToString() == "" && diag2.Background != Brushes.Yellow)
                         {
-                            correct2.Background = Brushes.Yellow;
-                        }
-                        else if (correct2.Content.ToString() != "" && correct2.Background != Brushes.Yellow && correct2.Foreground == Brushes.Green)
-                        {
-                            temp1 = bName[0];
-                            temp2 = (int)Char.GetNumericValue(bName[1]);
-                            temp1--;
-                            temp2++;
-                            temp1--;
-                            temp2++;
-                            diagName2 = temp1.ToString() + temp2;
-                            Button reality = (Button)FindName(diagName2);
-                            if (reality != null)
-                            {
-                                if (reality.Content.ToString() == "" && reality.Background != Brushes.Yellow)
-                                {
-                                    reality.Background = Brushes.Yellow;
-                                }
-                            }
+                            diag2.Background = Brushes.Yellow;
+                            redYellow.Add(diag2);
                         }
                         else
                         {
-                            correct2.Background = Brushes.Black;
+                            diag2.Background = Brushes.Black;
                         }
-                        
+                    }
+                    if (button.Content.ToString() == "K")
+                    {
+                        temp1 = bName[0];
+                        temp2 = (int)Char.GetNumericValue(bName[1]);
+                        temp1++;
+                        temp2++;
+                        diag3 = (Button)FindName(temp1.ToString() + temp2);
+                        if (diag3 != null)
+                        {
+                            if (diag3.Content.ToString() == "" && diag3.Background != Brushes.Yellow)
+                            {
+                                diag3.Background = Brushes.Yellow;
+                                redYellow.Add(diag3);
+                            }
+                            else
+                            {
+                                diag3.Background = Brushes.Black;
+                            }
+
+                        }
+
+                        temp1 = bName[0];
+                        temp2 = (int)Char.GetNumericValue(bName[1]);
+                        temp1++;
+                        temp2--;
+                        diag4 = (Button)FindName(temp1.ToString() + temp2);
+                        if (diag4 != null)
+                        {
+                            if (diag4.Content.ToString() == "" && diag4.Background != Brushes.Yellow)
+                            {
+                                diag4.Background = Brushes.Yellow;
+                                redYellow.Add(diag4);
+                            }
+                            else
+                            {
+                                diag4.Background = Brushes.Black;
+                            }
+
+                        }
                     }
                     last = button;
-                    diag1 = (Button)FindName(diagName1);
-                    diag2 = (Button)FindName(diagName2);
+                    if (redSwitch == true)
+                    {
+                        if (redYellow.Count != 0)
+                        {
+                            ComputerPlace();
+                            foreach (Button yellow in redYellow.ToList())
+                            {
+                                redYellow.Remove(yellow);
+                            }
+                        }
+                        else
+                        {
+                            ComputerAction();
+                        }
+                    }
                 }
             }
         }
+
         private void ComputerAction()
         {
-            Button rand;
-            System.Threading.Thread.Sleep(50);
-            rand = greenPieces[new Random().Next(0,greenPieces.Count)];
-            //REMOVE NON TAKING OPTIONS for each piece if there is an enemy piece capturable then show player moveable pieces by turning them blue returning MUST TAKE PIECE? then add if blue turn all blue black and show options as yellow and call clickmethod
-            //WHAT NEEDS ADDING IS TAKING PIECES AND REPLAY AND UNDO AND REDO AND FORCING JUMPING AND MULTI JUMPING AND KINGS
-            if (greenMoveable.Contains(rand) == false)
+            if (greenSwitch == true && ((turn % 2 != 0) == true)) 
             {
-                greenMoveable.Add(rand);
-                clickMethod(rand);
+                if (greenBlue.Count == 0)
+                {
+                    Button rand;
+                    System.Threading.Thread.Sleep(50);
+                    rand = greenPieces[new Random().Next(0, greenPieces.Count)];
+                    //REMOVE NON TAKING OPTIONS for each piece if there is an enemy piece capturable then show player moveable pieces by turning them blue returning MUST TAKE PIECE? then add if blue turn all blue black and show options as yellow and call clickmethod
+                    //WHAT NEEDS ADDING IS TAKING PIECES AND REPLAY AND UNDO AND REDO AND FORCING JUMPING AND MULTI JUMPING AND KINGS
+                    if (greenMoveable.Contains(rand) == false)
+                    {
+                        greenMoveable.Add(rand);
+                        clickMethod(rand);
+                    }
+                    else
+                    {
+                        ComputerAction();
+                    }
+                }
+                else
+                {
+                    Button rand;
+                    System.Threading.Thread.Sleep(50);
+                    rand = greenBlue[new Random().Next(0, greenBlue.Count)];
+                    if (greenMoveable.Contains(rand) == false)
+                    {
+                        greenMoveable.Add(rand);
+                        clickMethod(rand);
+                    }
+                    else
+                    {
+                        ComputerAction();
+                    }
+                }
             }
-            else
+
+            if (redSwitch == true && ((turn % 2 != 0) == false))
             {
-                ComputerAction();
+                if (redBlue.Count == 0)
+                {
+                    Button rand;
+                    System.Threading.Thread.Sleep(50);
+                    rand = redPieces[new Random().Next(0, redPieces.Count)];
+                    //REMOVE NON TAKING OPTIONS for each piece if there is an enemy piece capturable then show player moveable pieces by turning them blue returning MUST TAKE PIECE? then add if blue turn all blue black and show options as yellow and call clickmethod
+                    //WHAT NEEDS ADDING IS TAKING PIECES AND REPLAY AND UNDO AND REDO AND FORCING JUMPING AND MULTI JUMPING AND KINGS
+                    if (redMoveable.Contains(rand) == false)
+                    {
+                        redMoveable.Add(rand);
+                        clickMethod(rand);
+                    }
+                    else
+                    {
+                        ComputerAction();
+                    }
+                }
+                else
+                {
+                    Button rand;
+                    System.Threading.Thread.Sleep(50);
+                    rand = redBlue[new Random().Next(0, redBlue.Count)];
+                    if (redMoveable.Contains(rand) == false)
+                    {
+                        redMoveable.Add(rand);
+                        clickMethod(rand);
+                    }
+                    else
+                    {
+                        ComputerAction();
+                    }
+                }
             }
         }
 
         private void ComputerPlace()
         {
-            Button rand = greenYellow[new Random().Next(greenYellow.Count)];
-            clickMethod(rand);
-            foreach(Button item in greenMoveable.ToList())
+            if (greenSwitch == true && ((turn % 2 == 0) == true))
             {
-                greenMoveable.Remove(item);
+                Button rand = greenYellow[new Random().Next(greenYellow.Count)];
+                System.Threading.Thread.Sleep(50);
+                clickMethod(rand);
+                foreach (Button item in greenMoveable.ToList())
+                {
+                    greenMoveable.Remove(item);
+                }
+            }
+            else if (redSwitch == true && ((turn % 2 == 0) == false))
+            {
+                Button rand = redYellow[new Random().Next(redYellow.Count)];
+                System.Threading.Thread.Sleep(50);
+                clickMethod(rand);
+                foreach (Button item in redMoveable.ToList())
+                {
+                    redMoveable.Remove(item);
+                }
             }
         }
 
@@ -1086,36 +1296,12 @@ namespace Checkers
         {
             if (sender == vsGreenAI)
             {
-                //greenSwitch = true;
-                greenPieces.Add(A2);
-                greenPieces.Add(A4);
-                greenPieces.Add(A6);
-                greenPieces.Add(A8);
-                greenPieces.Add(B1);
-                greenPieces.Add(B3);
-                greenPieces.Add(B5);
-                greenPieces.Add(B7);
-                greenPieces.Add(C2);
-                greenPieces.Add(C4);
-                greenPieces.Add(C6);
-                greenPieces.Add(C8);
+                greenSwitch = true;
                 MessageBox.Show("Green AI On");
             }
             else if (sender == vsRedAI)
             {
-                //redSwitch = true;
-                redPieces.Add(F1);
-                redPieces.Add(F3);
-                redPieces.Add(F5);
-                redPieces.Add(F7);
-                redPieces.Add(G2);
-                redPieces.Add(G4);
-                redPieces.Add(G6);
-                redPieces.Add(G8);
-                redPieces.Add(H1);
-                redPieces.Add(H3);
-                redPieces.Add(H5);
-                redPieces.Add(H7);
+                redSwitch = true;
                 MessageBox.Show("Red AI On");
             }
         }
@@ -1126,30 +1312,30 @@ namespace Checkers
             //Button benjamin = (Button)FindName("A1");
             //pieces.Add(benjamin);
             //MessageBox.Show(pieces.Contains(A1).ToString());
-            pieces.Add(A2);
-            pieces.Add(A4);
-            pieces.Add(A6);
-            pieces.Add(A8);
-            pieces.Add(B1);
-            pieces.Add(B3);
-            pieces.Add(B5);
-            pieces.Add(B7);
-            pieces.Add(C2);
-            pieces.Add(C4);
-            pieces.Add(C6);
-            pieces.Add(C8);
-            pieces.Add(F1);
-            pieces.Add(F3);
-            pieces.Add(F5);
-            pieces.Add(F7);
-            pieces.Add(G2);
-            pieces.Add(G4);
-            pieces.Add(G6);
-            pieces.Add(G8);
-            pieces.Add(H1);
-            pieces.Add(H3);
-            pieces.Add(H5);
-            pieces.Add(H7);
+            greenPieces.Add(A2);
+            greenPieces.Add(A4);
+            greenPieces.Add(A6);
+            greenPieces.Add(A8);
+            greenPieces.Add(B1);
+            greenPieces.Add(B3);
+            greenPieces.Add(B5);
+            greenPieces.Add(B7);
+            greenPieces.Add(C2);
+            greenPieces.Add(C4);
+            greenPieces.Add(C6);
+            greenPieces.Add(C8);
+            redPieces.Add(F1);
+            redPieces.Add(F3);
+            redPieces.Add(F5);
+            redPieces.Add(F7);
+            redPieces.Add(G2);
+            redPieces.Add(G4);
+            redPieces.Add(G6);
+            redPieces.Add(G8);
+            redPieces.Add(H1);
+            redPieces.Add(H3);
+            redPieces.Add(H5);
+            redPieces.Add(H7);
         }
     }
 }
