@@ -49,7 +49,7 @@ namespace Checkers
         private List<Button> redMoveable = new List<Button>();
         private List<Button> redBlue = new List<Button>();
 
-        private void clickMethod(Button button)
+        private void clickMethod(Button button) //consider making the "blue" section into its own function
         {
             string bName = button.Name;
             if (button.Background == Brushes.Yellow)
@@ -361,47 +361,14 @@ namespace Checkers
                     }
                 }
 
-                if (diag1 != null)
-                {
-                    if (diag2 != null)
-                    {
-                        if (diag3 != null)
-                        {
-                            if (diag4 != null)
-                            {
-                                diag1.Background = Brushes.Black;
-                                diag2.Background = Brushes.Black;
-                                diag3.Background = Brushes.Black;
-                                diag4.Background = Brushes.Black;
-                            }
-                            else
-                            {
-                                diag1.Background = Brushes.Black;
-                                diag2.Background = Brushes.Black;
-                                diag3.Background = Brushes.Black;
-                            }
-                        }
-                        else
-                        {
-                            diag1.Background = Brushes.Black;
-                            diag2.Background = Brushes.Black;
-                        }
-                    }
-                    else
-                    {
-                        diag1.Background = Brushes.Black;
-                    }
-                }
+                DiagReset();
                 replay.Enqueue(last.Name + "|" + bName);
                 //MessageBox.Show(replay.Dequeue());
                 /*foreach (string x in replay)
                 {
                     MessageBox.Show(x);
                 }*/
-                diag1 = null;
-                diag2 = null;
-                diag3 = null;
-                diag4 = null;
+
                 if (extraJump == false)
                 {
                     turn++;
@@ -410,8 +377,18 @@ namespace Checkers
 
                 if (greenSwitch == true && button.Foreground == Brushes.Red)
                 {
-                    ComputerAction();
+                    greenMoveable = new List<Button>();
+                    greenYellow = new List<Button>();
                     greenBlue = new List<Button>();
+                    ComputerAction();
+                }
+
+                if (redSwitch == true && button.Foreground == Brushes.Green)
+                {
+                    redMoveable = new List<Button>();
+                    redYellow = new List<Button>();
+                    redBlue = new List<Button>();
+                    ComputerAction();
                 }
 
                 if (greenPieces.Count == 0)
@@ -449,6 +426,7 @@ namespace Checkers
                                 {
                                     dat.Background = Brushes.Yellow;
                                     diag1 = dat;
+                                    last = button;
                                     if (redSwitch == true)
                                     {
                                         redYellow.Add(dat);
@@ -476,6 +454,7 @@ namespace Checkers
                                 {
                                     dat.Background = Brushes.Yellow;
                                     diag2 = dat;
+                                    last = button;
                                     if (redSwitch == true)
                                     {
                                         redYellow.Add(dat);
@@ -504,6 +483,7 @@ namespace Checkers
                                     {
                                         dat.Background = Brushes.Yellow;
                                         diag3 = dat;
+                                        last = button;
                                         if (redSwitch == true)
                                         {
                                             redYellow.Add(dat);
@@ -531,6 +511,7 @@ namespace Checkers
                                     {
                                         dat.Background = Brushes.Yellow;
                                         diag4 = dat;
+                                        last = button;
                                         if (redSwitch == true)
                                         {
                                             redYellow.Add(dat);
@@ -540,10 +521,10 @@ namespace Checkers
                             }
                         }
                     }
-                    last = button;
                     if (redSwitch == true)
                     {
                         ComputerPlace();
+                        redYellow = new List<Button>();
                     }
                 }
                 else if (greenPieces.Contains(button)) //if green
@@ -566,6 +547,7 @@ namespace Checkers
                                 {
                                     dat.Background = Brushes.Yellow;
                                     diag1 = dat;
+                                    last = button;
                                     if (greenSwitch == true)
                                     {
                                         greenYellow.Add(dat);
@@ -593,6 +575,7 @@ namespace Checkers
                                 {
                                     dat.Background = Brushes.Yellow;
                                     diag2 = dat;
+                                    last = button;
                                     if (greenSwitch == true)
                                     {
                                         greenYellow.Add(dat);
@@ -621,6 +604,7 @@ namespace Checkers
                                     {
                                         dat.Background = Brushes.Yellow;
                                         diag3 = dat;
+                                        last = button;
                                         if (greenSwitch == true)
                                         {
                                             greenYellow.Add(dat);
@@ -648,6 +632,7 @@ namespace Checkers
                                     {
                                         dat.Background = Brushes.Yellow;
                                         diag4 = dat;
+                                        last = button;
                                         if (greenSwitch == true)
                                         {
                                             greenYellow.Add(dat);
@@ -657,10 +642,10 @@ namespace Checkers
                             }
                         }
                     }
-                    last = button;
                     if (greenSwitch == true)
                     {
                         ComputerPlace();
+                        greenYellow = new List<Button>();
                     }
                 }
             }
@@ -688,6 +673,7 @@ namespace Checkers
                                     {
                                         piece.Background = Brushes.Blue;
                                         greenBlue.Add(piece); //computer player not choosing blue square, just choosing square then being checked, make separate check for computer player mb?
+                                        last = button;
                                         blueExists = true;
                                     }
                                 }
@@ -712,6 +698,7 @@ namespace Checkers
                                     {
                                         piece.Background = Brushes.Blue;
                                         greenBlue.Add(piece);
+                                        last = button;
                                         blueExists = true;
                                     }
                                 }
@@ -737,6 +724,7 @@ namespace Checkers
                                         {
                                             piece.Background = Brushes.Blue;
                                             greenBlue.Add(piece);
+                                            last = button;
                                             blueExists = true;
                                         }
                                     }
@@ -761,6 +749,7 @@ namespace Checkers
                                         {
                                             piece.Background = Brushes.Blue;
                                             greenBlue.Add(piece);
+                                            last = button;
                                             blueExists = true;
                                         }
                                     }
@@ -794,42 +783,7 @@ namespace Checkers
 
                 if (blueExists == false)
                 {
-                    if (diag1 != null)
-                    {
-                        if (diag2 != null)
-                        {
-                            if (diag3 != null)
-                            {
-                                if (diag4 != null)
-                                {
-                                    diag1.Background = Brushes.Black;
-                                    diag2.Background = Brushes.Black;
-                                    diag3.Background = Brushes.Black;
-                                    diag4.Background = Brushes.Black;
-                                }
-                                else
-                                {
-                                    diag1.Background = Brushes.Black;
-                                    diag2.Background = Brushes.Black;
-                                    diag3.Background = Brushes.Black;
-                                }
-                            }
-                            else
-                            {
-                                diag1.Background = Brushes.Black;
-                                diag2.Background = Brushes.Black;
-                            }
-                        }
-                        else
-                        {
-                            diag1.Background = Brushes.Black;
-                        }
-                    }
-                    diag1 = null;
-                    diag2 = null;
-                    diag3 = null;
-                    diag4 = null;
-
+                    DiagReset();
                     char temp1 = bName[0];
                     int temp2 = (int)Char.GetNumericValue(bName[1]);
                     temp1++;
@@ -840,6 +794,7 @@ namespace Checkers
                         if (diag1.Content.ToString() == "" && diag1.Background != Brushes.Yellow)
                         {
                             diag1.Background = Brushes.Yellow;
+                            last = button;
                             greenYellow.Add(diag1);
                         }
                         else
@@ -858,6 +813,7 @@ namespace Checkers
                         if (diag2.Content.ToString() == "" && diag2.Background != Brushes.Yellow)
                         {
                             diag2.Background = Brushes.Yellow;
+                            last = button;
                             greenYellow.Add(diag2);
                         }
                         else
@@ -879,6 +835,7 @@ namespace Checkers
                             if (diag3.Content.ToString() == "" && diag3.Background != Brushes.Yellow)
                             {
                                 diag3.Background = Brushes.Yellow;
+                                last = button;
                                 greenYellow.Add(diag3);
                             }
                             else
@@ -898,6 +855,7 @@ namespace Checkers
                             if (diag4.Content.ToString() == "" && diag4.Background != Brushes.Yellow)
                             {
                                 diag4.Background = Brushes.Yellow;
+                                last = button;
                                 greenYellow.Add(diag4);
                             }
                             else
@@ -907,16 +865,12 @@ namespace Checkers
 
                         }
                     }
-                    last = button;
                     if (greenSwitch == true)
                     {
-                        if (greenYellow.Count != 0)
+                        if (greenYellow.Count != 0 && greenPieces.Contains(button))
                         {
                             ComputerPlace();
-                            foreach (Button yellow in greenYellow.ToList())
-                            {
-                                greenYellow.Remove(yellow);
-                            }
+                            greenYellow = new List<Button>();
                         }
                         else
                         {
@@ -951,6 +905,7 @@ namespace Checkers
                                     {
                                         piece.Background = Brushes.Blue;
                                         redBlue.Add(piece);
+                                        last = button;
                                         blueExists = true;
                                     }
                                 }
@@ -975,6 +930,7 @@ namespace Checkers
                                     {
                                         piece.Background = Brushes.Blue;
                                         redBlue.Add(piece);
+                                        last = button;
                                         blueExists = true;
                                     }
                                 }
@@ -1000,6 +956,7 @@ namespace Checkers
                                         {
                                             piece.Background = Brushes.Blue;
                                             redBlue.Add(piece);
+                                            last = button;
                                             blueExists = true;
                                         }
                                     }
@@ -1024,6 +981,7 @@ namespace Checkers
                                         {
                                             piece.Background = Brushes.Blue;
                                             redBlue.Add(piece);
+                                            last = button;
                                             blueExists = true;
                                         }
                                     }
@@ -1057,42 +1015,7 @@ namespace Checkers
 
                 if (blueExists == false)
                 {
-                    if (diag1 != null)
-                    {
-                        if (diag2 != null)
-                        {
-                            if (diag3 != null)
-                            {
-                                if (diag4 != null)
-                                {
-                                    diag1.Background = Brushes.Black;
-                                    diag2.Background = Brushes.Black;
-                                    diag3.Background = Brushes.Black;
-                                    diag4.Background = Brushes.Black;
-                                }
-                                else
-                                {
-                                    diag1.Background = Brushes.Black;
-                                    diag2.Background = Brushes.Black;
-                                    diag3.Background = Brushes.Black;
-                                }
-                            }
-                            else
-                            {
-                                diag1.Background = Brushes.Black;
-                                diag2.Background = Brushes.Black;
-                            }
-                        }
-                        else
-                        {
-                            diag1.Background = Brushes.Black;
-                        }
-                    }
-                    diag1 = null;
-                    diag2 = null;
-                    diag3 = null;
-                    diag4 = null;
-
+                    DiagReset();
                     char temp1 = bName[0];
                     int temp2 = (int)Char.GetNumericValue(bName[1]);
                     temp1--;
@@ -1103,6 +1026,7 @@ namespace Checkers
                         if (diag1.Content.ToString() == "" && diag1.Background != Brushes.Yellow)
                         {
                             diag1.Background = Brushes.Yellow;
+                            last = button;
                             redYellow.Add(diag1);
                         }
                         else
@@ -1121,6 +1045,7 @@ namespace Checkers
                         if (diag2.Content.ToString() == "" && diag2.Background != Brushes.Yellow)
                         {
                             diag2.Background = Brushes.Yellow;
+                            last = button;
                             redYellow.Add(diag2);
                         }
                         else
@@ -1140,6 +1065,7 @@ namespace Checkers
                             if (diag3.Content.ToString() == "" && diag3.Background != Brushes.Yellow)
                             {
                                 diag3.Background = Brushes.Yellow;
+                                last = button;
                                 redYellow.Add(diag3);
                             }
                             else
@@ -1159,6 +1085,7 @@ namespace Checkers
                             if (diag4.Content.ToString() == "" && diag4.Background != Brushes.Yellow)
                             {
                                 diag4.Background = Brushes.Yellow;
+                                last = button;
                                 redYellow.Add(diag4);
                             }
                             else
@@ -1168,16 +1095,12 @@ namespace Checkers
 
                         }
                     }
-                    last = button;
                     if (redSwitch == true)
                     {
-                        if (redYellow.Count != 0)
+                        if (redYellow.Count != 0 && redPieces.Contains(button))
                         {
                             ComputerPlace();
-                            foreach (Button yellow in redYellow.ToList())
-                            {
-                                redYellow.Remove(yellow);
-                            }
+                            redYellow = new List<Button>();
                         }
                         else
                         {
@@ -1196,17 +1119,18 @@ namespace Checkers
                 {
                     Button rand;
                     System.Threading.Thread.Sleep(50);
-                    rand = greenPieces[new Random().Next(0, greenPieces.Count)];
-                    //REMOVE NON TAKING OPTIONS for each piece if there is an enemy piece capturable then show player moveable pieces by turning them blue returning MUST TAKE PIECE? then add if blue turn all blue black and show options as yellow and call clickmethod
-                    //WHAT NEEDS ADDING IS TAKING PIECES AND REPLAY AND UNDO AND REDO AND FORCING JUMPING AND MULTI JUMPING AND KINGS
-                    if (greenMoveable.Contains(rand) == false)
+                    if (greenPieces.Count != 0)
                     {
-                        greenMoveable.Add(rand);
-                        clickMethod(rand);
-                    }
-                    else
-                    {
-                        ComputerAction();
+                        rand = greenPieces[new Random().Next(0, greenPieces.Count)];
+                        if (greenMoveable.Contains(rand) == false)
+                        {
+                            greenMoveable.Add(rand);
+                            clickMethod(rand);
+                        }
+                        else
+                        {
+                            ComputerAction();
+                        }
                     }
                 }
                 else
@@ -1232,17 +1156,18 @@ namespace Checkers
                 {
                     Button rand;
                     System.Threading.Thread.Sleep(50);
-                    rand = redPieces[new Random().Next(0, redPieces.Count)];
-                    //REMOVE NON TAKING OPTIONS for each piece if there is an enemy piece capturable then show player moveable pieces by turning them blue returning MUST TAKE PIECE? then add if blue turn all blue black and show options as yellow and call clickmethod
-                    //WHAT NEEDS ADDING IS TAKING PIECES AND REPLAY AND UNDO AND REDO AND FORCING JUMPING AND MULTI JUMPING AND KINGS
-                    if (redMoveable.Contains(rand) == false)
+                    if (redPieces.Count != 0)
                     {
-                        redMoveable.Add(rand);
-                        clickMethod(rand);
-                    }
-                    else
-                    {
-                        ComputerAction();
+                        rand = redPieces[new Random().Next(0, redPieces.Count)];
+                        if (redMoveable.Contains(rand) == false)
+                        {
+                            redMoveable.Add(rand);
+                            clickMethod(rand);
+                        }
+                        else
+                        {
+                            ComputerAction();
+                        }
                     }
                 }
                 else
@@ -1265,20 +1190,22 @@ namespace Checkers
 
         private void ComputerPlace()
         {
-            if (greenSwitch == true && ((turn % 2 == 0) == true))
+            if (greenSwitch == true && ((turn % 2 == 0) == false))
             {
-                Button rand = greenYellow[new Random().Next(greenYellow.Count)];
+                Button rand = greenYellow[new Random().Next(0,greenYellow.Count)];
                 System.Threading.Thread.Sleep(50);
+                MessageBox.Show(last.Name + "|" + rand.Name);
                 clickMethod(rand);
                 foreach (Button item in greenMoveable.ToList())
                 {
                     greenMoveable.Remove(item);
                 }
             }
-            else if (redSwitch == true && ((turn % 2 == 0) == false))
+            else if (redSwitch == true && ((turn % 2 == 0) == true))
             {
-                Button rand = redYellow[new Random().Next(redYellow.Count)];
+                Button rand = redYellow[new Random().Next(0,redYellow.Count)];
                 System.Threading.Thread.Sleep(50);
+                MessageBox.Show(last.Name + "|" + rand.Name);
                 clickMethod(rand);
                 foreach (Button item in redMoveable.ToList())
                 {
@@ -1304,6 +1231,30 @@ namespace Checkers
                 redSwitch = true;
                 MessageBox.Show("Red AI On");
             }
+        }
+
+        private void DiagReset()
+        {
+            if (diag1 != null)
+            {
+                diag1.Background = Brushes.Black;
+            }
+            if (diag2 != null)
+            {
+                diag2.Background = Brushes.Black;
+            }
+            if (diag3 != null)
+            {
+                diag3.Background = Brushes.Black;
+            }
+            if (diag4 != null)
+            {
+                diag4.Background = Brushes.Black;
+            }
+            diag1 = null;
+            diag2 = null;
+            diag3 = null;
+            diag4 = null;
         }
 
         private void tempSet_Click(object sender, RoutedEventArgs e)
@@ -1336,6 +1287,10 @@ namespace Checkers
             redPieces.Add(H3);
             redPieces.Add(H5);
             redPieces.Add(H7);
+            if (redSwitch == true)
+            {
+                ComputerAction();
+            }
         }
     }
 }
