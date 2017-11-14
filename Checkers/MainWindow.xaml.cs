@@ -109,6 +109,8 @@ namespace Checkers
                     greenPieces.Remove(last);
                     greenPieces.Add(button);
                 }
+                
+                replay.Enqueue(last.Name + "|" + bName);
 
                 if (lastBlue == true)
                 {
@@ -362,7 +364,7 @@ namespace Checkers
                 }
 
                 DiagReset();
-                replay.Enqueue(last.Name + "|" + bName);
+                
                 //MessageBox.Show(replay.Dequeue());
                 /*foreach (string x in replay)
                 {
@@ -391,17 +393,38 @@ namespace Checkers
                     ComputerAction();
                 }
 
+
                 if (greenPieces.Count == 0)
                 {
                     MessageBox.Show("Red Wins!");
                     greenSwitch = false;
                     redSwitch = false;
+                    string replayReq = MessageBox.Show("Do you want to save your game?", "", MessageBoxButton.YesNo).ToString();
+                    if (replayReq == "Yes")
+                    {
+                        Random rand = new Random();
+                        int random = rand.Next(0, 1000);
+                        int random2 = rand.Next(0, 1000);
+                        string path = "replay" + random + random2 + ".rp";
+                        System.IO.File.WriteAllLines(path, replay.ToArray());
+                        MessageBox.Show("Saved under " + path);
+                    }
                 }
                 else if (redPieces.Count == 0)
                 {
                     MessageBox.Show("Green Wins!");
                     greenSwitch = false;
                     redSwitch = false;
+                    string replayReq = MessageBox.Show("Do you want to save your game?", "", MessageBoxButton.YesNo).ToString();
+                    if (replayReq == "Yes")
+                    {
+                        Random rand = new Random();
+                        int random = rand.Next(0, 1000);
+                        int random2 = rand.Next(0, 1000);
+                        string path = "replay" + random + random2 + ".rp";
+                        System.IO.File.WriteAllLines(path, replay.ToArray());
+                        MessageBox.Show("Saved under " + path);
+                    }
                 }
             }
             else if (button.Background == Brushes.Blue) //BLUE IS FOR TAKING
@@ -1113,7 +1136,7 @@ namespace Checkers
 
         private void ComputerAction()
         {
-            if (greenSwitch == true && ((turn % 2 != 0) == true)) 
+            if (greenSwitch == true && ((turn % 2 != 0) == true))
             {
                 if (greenBlue.Count == 0)
                 {
@@ -1192,7 +1215,7 @@ namespace Checkers
         {
             if (greenSwitch == true && ((turn % 2 == 0) == false))
             {
-                Button rand = greenYellow[new Random().Next(0,greenYellow.Count)];
+                Button rand = greenYellow[new Random().Next(0, greenYellow.Count)];
                 System.Threading.Thread.Sleep(50);
                 MessageBox.Show(last.Name + "|" + rand.Name);
                 clickMethod(rand);
@@ -1203,7 +1226,7 @@ namespace Checkers
             }
             else if (redSwitch == true && ((turn % 2 == 0) == true))
             {
-                Button rand = redYellow[new Random().Next(0,redYellow.Count)];
+                Button rand = redYellow[new Random().Next(0, redYellow.Count)];
                 System.Threading.Thread.Sleep(50);
                 MessageBox.Show(last.Name + "|" + rand.Name);
                 clickMethod(rand);
@@ -1257,6 +1280,18 @@ namespace Checkers
             diag4 = null;
         }
 
+        private void ReplaySetup()
+        {
+            replay = new Queue<string>();//make this in an if file exists function
+            foreach (string line in System.IO.File.ReadAllLines(inputBox.Text))
+            {
+                replay.Enqueue(line);
+            }
+            CheckersWindow.Hide();
+            Replay replayWin = new Replay(replay);
+            replayWin.Show();
+        }
+
         private void tempSet_Click(object sender, RoutedEventArgs e)
         {
             //if((Button)FindName(button.name[0]--.toString()+button.name[1]--.toString()).content.toString()==O)
@@ -1291,6 +1326,11 @@ namespace Checkers
             {
                 ComputerAction();
             }
+        }
+
+        private void loadReplay_Click(object sender, RoutedEventArgs e)
+        {
+            ReplaySetup();
         }
     }
 }
