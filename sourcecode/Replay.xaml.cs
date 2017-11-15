@@ -19,7 +19,7 @@ namespace Checkers
     /// </summary>
     public partial class Replay : Window
     {
-        Queue<string> replayQ = new Queue<string>();
+        private Queue<string> replayQ = new Queue<string>(); //fill a queue with the replay's actions
         public Replay(Queue<string> rp)
         {
             InitializeComponent();
@@ -28,7 +28,7 @@ namespace Checkers
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (replayQ.Count != 0)
+            if (replayQ.Count != 0) //play out the game step by step every time any button is clicked
             {
                 string move = replayQ.Dequeue();
                 MessageBox.Show(move);
@@ -36,12 +36,12 @@ namespace Checkers
                 {
                     char x = (char)((move[0] + move[3]) / 2);
                     char y = (char)((move[1] + move[4]) / 2);
-                    Button remove = (Button)FindName(x.ToString() + y.ToString());
+                    Button remove = (Button)FindName(x.ToString() + y.ToString()); //finds the button that is getting captured
                     remove.Content = "";
                 }
-                Button move1 = (Button)FindName(move[0].ToString() + move[1].ToString());
-                Button move2 = (Button)FindName(move[3].ToString() + move[4].ToString());
-                if (move2.Name[0] == 'A' || move2.Name[0] == 'H')
+                Button move1 = (Button)FindName(move[0].ToString() + move[1].ToString()); //finds the button that is moving from this location
+                Button move2 = (Button)FindName(move[3].ToString() + move[4].ToString()); //finds the button that is moving to this location
+                if (move2.Name[0] == 'A' || move2.Name[0] == 'H') //if a pieces reaches an end make it a king
                 {
                     move2.Content = "K";
                 }
@@ -61,7 +61,7 @@ namespace Checkers
             }
             else
             {
-                MessageBox.Show("End of Replay.");
+                MessageBox.Show("End of Replay."); //if there are no more moves then if any button is clicked say as much
             }
         }
     }

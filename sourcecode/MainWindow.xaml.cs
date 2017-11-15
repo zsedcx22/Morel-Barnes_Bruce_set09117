@@ -25,39 +25,38 @@ namespace Checkers
             InitializeComponent();
         }
 
-        private Queue<string> replay = new Queue<string>(); //change to stack maybe for additional brownie points maybe use queue for this and/or doing the replay
-        private Button last;
-        private Button diag1;
-        private Button diag2;
-        private Button diag3;
-        private Button diag4;
-        private int turn = 0;
+        private Queue<string> replay = new Queue<string>(); //queue to store each move done so far
+        private Button last; //stores the last button selected
+        private Button diag1; //stores a diagonal (used for determining legal moves)
+        private Button diag2; //stores a diagonal (used for determining legal moves)
+        private Button diag3; //stores a diagonal (used for determining legal moves)
+        private Button diag4; //stores a diagonal (used for determining legal moves)
+        private int turn = 0; //stores who's turn it is
+        private bool blueExists = false; //a boolean to tell whether a piece can be taken
 
-        private List<Button> pieces = new List<Button>();
+        private bool greenSwitch = false; //a boolean to tell whether the green computer player is on or off
+        private List<Button> greenPieces = new List<Button>(); //a list to store the location of green's pieces
+        //next 3 only relevant to computer player
+        private List<Button> greenYellow = new List<Button>(); //a list to tell if the selected piece has any valid moves
+        private List<Button> greenMoveable = new List<Button>(); //a list to tell if the selected piece has already been selected before (i.e. if there were no valid moves from that piece)
+        private List<Button> greenBlue = new List<Button>(); //a list to tell what pieces can take another piece
 
-        private bool blueExists = false;
+        private bool redSwitch = false; //a boolean to tell whether the red computer player is on or off
+        private List<Button> redPieces = new List<Button>(); //a list to store the location of red's pieces
+        //next 3 only relevant to computer player
+        private List<Button> redYellow = new List<Button>(); //a list to tell if the selected piece has any valid moves
+        private List<Button> redMoveable = new List<Button>(); //a list to tell if the selected piece has already been selected before (i.e. if there were no valid moves from that piece)
+        private List<Button> redBlue = new List<Button>(); //a list to tell what pieces can take another piece
 
-        private bool greenSwitch = false;
-        private List<Button> greenPieces = new List<Button>();
-        private List<Button> greenYellow = new List<Button>();
-        private List<Button> greenMoveable = new List<Button>();
-        private List<Button> greenBlue = new List<Button>();
-
-        private bool redSwitch = false;
-        private List<Button> redPieces = new List<Button>();
-        private List<Button> redYellow = new List<Button>();
-        private List<Button> redMoveable = new List<Button>();
-        private List<Button> redBlue = new List<Button>();
-
-        private void clickMethod(Button button) //consider making the "blue" section into its own function
+        private void clickMethod(Button button) //main method that all buttons in the checkers board grid call when clicked
         {
-            string bName = button.Name;
-            if (button.Background == Brushes.Yellow)
+            string bName = button.Name; //string to store the name of the button
+            if (button.Background == Brushes.Yellow) //if the selected button was a location that was valid for a piece to move to
             {
                 blueExists = false;
-                bool extraJump = false;
-                bool lastBlue = false;
-                if (last.Background == Brushes.Blue)
+                bool extraJump = false; //boolean to tell whether after a taking of a piece, the turn should change to the other player
+                bool lastBlue = false; //tells the system whether the last button selected was able to take a piece
+                if (last.Background == Brushes.Blue) //if the last button selected could take another piece then remove the piece that it jumped over from the relevant list
                 {
                     char x = (char)((last.Name[0] + button.Name[0]) / 2);
                     char y = (char)((last.Name[1] + button.Name[1]) / 2);
@@ -75,16 +74,17 @@ namespace Checkers
                     lastBlue = true;
                 }
 
+                //reset the background colours of each piece in both lists
                 foreach (Button piece in redPieces)
                 {
                     piece.Background = Brushes.Black;
                 }
-
                 foreach (Button piece in greenPieces)
                 {
                     piece.Background = Brushes.Black;
                 }
 
+                //if the piece reaches an end then make it a king if it didn't just set the current button's value to the last one's (note that validation for team is not required as pawns cannot move backwards)
                 if (button.Name[0] == 'A' || button.Name[0] == 'H')
                 {
                     button.Content = "K";
@@ -93,7 +93,7 @@ namespace Checkers
                 {
                     button.Content = last.Content;
                 }
-
+                //move the last selected button to the currently selected button's location
                 button.Foreground = last.Foreground;
                 button.Background = last.Background;
                 last.Foreground = Brushes.Black;
@@ -103,32 +103,31 @@ namespace Checkers
                     redPieces.Remove(last);
                     redPieces.Add(button);
                 }
-
                 if (greenPieces.Contains(last))
                 {
                     greenPieces.Remove(last);
                     greenPieces.Add(button);
                 }
                 
-                replay.Enqueue(last.Name + "|" + bName);
+                replay.Enqueue(last.Name + "|" + bName); //add the move to the replay queue
 
-                if (lastBlue == true)
+                if (lastBlue == true) //if the last selection could have taken a piece
                 {
                     bool newBlue = false;
-                    if (redPieces.Contains(button)) //if a red piece in a taking position is clicked then show only valid options
+                    if (redPieces.Contains(button)) //if a red piece in a taking position is selected then show only valid options
                     {
                         char tmp1 = button.Name[0];
                         char tmp2 = button.Name[1];
                         tmp1--;
                         tmp2--;
-                        Button tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                        Button tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                         if (tmp != null)
                         {
                             if (greenPieces.Contains(tmp))
                             {
                                 tmp1--;
                                 tmp2--;
-                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one
                                 if (dat != null)
                                 {
                                     if (dat.Content.ToString() == "")
@@ -150,14 +149,14 @@ namespace Checkers
                         tmp2 = button.Name[1];
                         tmp1--;
                         tmp2++;
-                        tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                        tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                         if (tmp != null)
                         {
                             if (greenPieces.Contains(tmp))
                             {
                                 tmp1--;
                                 tmp2++;
-                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one
                                 if (dat != null)
                                 {
                                     if (dat.Content.ToString() == "")
@@ -180,14 +179,14 @@ namespace Checkers
                             tmp2 = button.Name[1];
                             tmp1++;
                             tmp2++;
-                            tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                            tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                             if (tmp != null)
                             {
                                 if (greenPieces.Contains(tmp))
                                 {
                                     tmp1++;
                                     tmp2++;
-                                    Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                                    Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one
                                     if (dat != null)
                                     {
                                         if (dat.Content.ToString() == "")
@@ -209,14 +208,14 @@ namespace Checkers
                             tmp2 = button.Name[1];
                             tmp1++;
                             tmp2--;
-                            tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                            tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                             if (tmp != null)
                             {
                                 if (greenPieces.Contains(tmp))
                                 {
                                     tmp1++;
                                     tmp2--;
-                                    Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                                    Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one
                                     if (dat != null)
                                     {
                                         if (dat.Content.ToString() == "")
@@ -235,20 +234,20 @@ namespace Checkers
                             }
                         }
                     }
-                    else if (greenPieces.Contains(button))
+                    else if (greenPieces.Contains(button)) //if a green piece in a taking position is selecteded then show only valid options
                     {
                         char tmp1 = button.Name[0];
                         char tmp2 = button.Name[1];
                         tmp1++;
                         tmp2++;
-                        Button tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                        Button tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                         if (tmp != null)
                         {
                             if (redPieces.Contains(tmp))
                             {
                                 tmp1++;
                                 tmp2++;
-                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one
                                 if (dat != null)
                                 {
                                     if (dat.Content.ToString() == "")
@@ -270,14 +269,14 @@ namespace Checkers
                         tmp2 = button.Name[1];
                         tmp1++;
                         tmp2--;
-                        tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                        tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                         if (tmp != null)
                         {
                             if (redPieces.Contains(tmp))
                             {
                                 tmp1++;
                                 tmp2--;
-                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one
                                 if (dat != null)
                                 {
                                     if (dat.Content.ToString() == "")
@@ -300,14 +299,14 @@ namespace Checkers
                             tmp2 = button.Name[1];
                             tmp1--;
                             tmp2--;
-                            tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                            tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                             if (tmp != null)
                             {
                                 if (redPieces.Contains(tmp))
                                 {
                                     tmp1--;
                                     tmp2--;
-                                    Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                                    Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one
                                     if (dat != null)
                                     {
                                         if (dat.Content.ToString() == "")
@@ -329,14 +328,14 @@ namespace Checkers
                             tmp2 = button.Name[1];
                             tmp1--;
                             tmp2++;
-                            tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                            tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                             if (tmp != null)
                             {
                                 if (redPieces.Contains(tmp))
                                 {
                                     tmp1--;
                                     tmp2++;
-                                    Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                                    Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one
                                     if (dat != null)
                                     {
                                         if (dat.Content.ToString() == "")
@@ -355,7 +354,7 @@ namespace Checkers
                             }
                         }
                     }
-                    if (newBlue == true)
+                    if (newBlue == true) //then if the current button can take another piece, force the user to take the other piece
                     {
                         button.Background = Brushes.Blue;
                         clickMethod(button);
@@ -363,38 +362,15 @@ namespace Checkers
                     }
                 }
 
-                DiagReset();
+                DiagReset(); //reset the colours of each of the pieces diagonal to the current piece
                 
-                //MessageBox.Show(replay.Dequeue());
-                /*foreach (string x in replay)
-                {
-                    MessageBox.Show(x);
-                }*/
-
-                if (extraJump == false)
+                if (extraJump == false) //if the current player is not taking multiple pieces then pass the turn to the other player
                 {
                     turn++;
                 }
                 lastBlue = false;
 
-                if (greenSwitch == true && button.Foreground == Brushes.Red)
-                {
-                    greenMoveable = new List<Button>();
-                    greenYellow = new List<Button>();
-                    greenBlue = new List<Button>();
-                    ComputerAction();
-                }
-
-                if (redSwitch == true && button.Foreground == Brushes.Green)
-                {
-                    redMoveable = new List<Button>();
-                    redYellow = new List<Button>();
-                    redBlue = new List<Button>();
-                    ComputerAction();
-                }
-
-
-                if (greenPieces.Count == 0)
+                if (greenPieces.Count == 0) //if the green player has no pieces then declare red as the winner and give them the option of saving their replay
                 {
                     MessageBox.Show("Red Wins!");
                     greenSwitch = false;
@@ -410,7 +386,7 @@ namespace Checkers
                         MessageBox.Show("Saved under " + path);
                     }
                 }
-                else if (redPieces.Count == 0)
+                else if (redPieces.Count == 0) //if the red player has no pieces then declare green as the winner and give them the option of saving their replay
                 {
                     MessageBox.Show("Green Wins!");
                     greenSwitch = false;
@@ -426,23 +402,39 @@ namespace Checkers
                         MessageBox.Show("Saved under " + path);
                     }
                 }
+
+                if (greenSwitch == true && redPieces.Contains(button)) //if the greencomputer player is active and the last moved button was red then reset all of the temporary computer player lists and make the computer player select a piece
+                {
+                    greenMoveable = new List<Button>();
+                    greenYellow = new List<Button>();
+                    greenBlue = new List<Button>();
+                    ComputerAction();
+                }
+
+                if (redSwitch == true && greenPieces.Contains(button)) //if the red computer player is active and the last moved button was green then reset all of the temporary computer player lists and make the computer player select a piece
+                {
+                    redMoveable = new List<Button>();
+                    redYellow = new List<Button>();
+                    redBlue = new List<Button>();
+                    ComputerAction();
+                }
             }
-            else if (button.Background == Brushes.Blue) //BLUE IS FOR TAKING
+            else if (button.Background == Brushes.Blue) //blue means that the selected piece can take an opposing piece
             {
-                if (redPieces.Contains(button)) //if a red piece in a taking position is clicked then show only valid options
+                if (redPieces.Contains(button)) //if a red piece in a taking position is selected then show only valid options
                 {
                     char tmp1 = button.Name[0];
                     char tmp2 = button.Name[1];
                     tmp1--;
                     tmp2--;
-                    Button tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                    Button tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                     if (tmp != null)
                     {
                         if (greenPieces.Contains(tmp))
                         {
                             tmp1--;
                             tmp2--;
-                            Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                            Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one and add it as a move option
                             if (dat != null)
                             {
                                 if (dat.Content.ToString() == "")
@@ -463,14 +455,14 @@ namespace Checkers
                     tmp2 = button.Name[1];
                     tmp1--;
                     tmp2++;
-                    tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                    tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                     if (tmp != null)
                     {
                         if (greenPieces.Contains(tmp))
                         {
                             tmp1--;
                             tmp2++;
-                            Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                            Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one and add it as a move option
                             if (dat != null)
                             {
                                 if (dat.Content.ToString() == "")
@@ -492,14 +484,14 @@ namespace Checkers
                         tmp2 = button.Name[1];
                         tmp1++;
                         tmp2++;
-                        tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                        tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                         if (tmp != null)
                         {
                             if (greenPieces.Contains(tmp))
                             {
                                 tmp1++;
                                 tmp2++;
-                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one and add it as a move option
                                 if (dat != null)
                                 {
                                     if (dat.Content.ToString() == "")
@@ -520,14 +512,14 @@ namespace Checkers
                         tmp2 = button.Name[1];
                         tmp1++;
                         tmp2--;
-                        tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                        tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                         if (tmp != null)
                         {
                             if (greenPieces.Contains(tmp))
                             {
                                 tmp1++;
                                 tmp2--;
-                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one and add it as a move option
                                 if (dat != null)
                                 {
                                     if (dat.Content.ToString() == "")
@@ -550,20 +542,20 @@ namespace Checkers
                         redYellow = new List<Button>();
                     }
                 }
-                else if (greenPieces.Contains(button)) //if green
-                { //change part of this for cpu to "click" the yellow part
+                else if (greenPieces.Contains(button)) //if a green piece in a taking position is selected then show only valid options
+                {
                     char tmp1 = button.Name[0];
                     char tmp2 = button.Name[1];
                     tmp1++;
                     tmp2++;
-                    Button tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                    Button tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                     if (tmp != null)
                     {
                         if (redPieces.Contains(tmp))
                         {
                             tmp1++;
                             tmp2++;
-                            Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                            Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one and add it as a move option
                             if (dat != null)
                             {
                                 if (dat.Content.ToString() == "")
@@ -584,14 +576,14 @@ namespace Checkers
                     tmp2 = button.Name[1];
                     tmp1++;
                     tmp2--;
-                    tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                    tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                     if (tmp != null)
                     {
                         if (redPieces.Contains(tmp))
                         {
                             tmp1++;
                             tmp2--;
-                            Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                            Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one and add it as a move option
                             if (dat != null)
                             {
                                 if (dat.Content.ToString() == "")
@@ -613,14 +605,14 @@ namespace Checkers
                         tmp2 = button.Name[1];
                         tmp1--;
                         tmp2--;
-                        tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                        tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                         if (tmp != null)
                         {
                             if (redPieces.Contains(tmp))
                             {
                                 tmp1--;
                                 tmp2--;
-                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one and add it as a move option
                                 if (dat != null)
                                 {
                                     if (dat.Content.ToString() == "")
@@ -641,14 +633,14 @@ namespace Checkers
                         tmp2 = button.Name[1];
                         tmp1--;
                         tmp2++;
-                        tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                        tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                         if (tmp != null)
                         {
                             if (redPieces.Contains(tmp))
                             {
                                 tmp1--;
                                 tmp2++;
-                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one and add it as a move option
                                 if (dat != null)
                                 {
                                     if (dat.Content.ToString() == "")
@@ -672,9 +664,9 @@ namespace Checkers
                     }
                 }
             }
-            else if (button.Foreground == Brushes.Green && ((turn % 2 != 0) == true)) //GREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEN
+            else if (button.Foreground == Brushes.Green && ((turn % 2 != 0) == true)) //if the piece selected belongs to green and it's their turn
             {
-                if (blueExists == false)
+                if (blueExists == false) //if a piece that can take a piece does not exist
                 {
                     foreach (Button piece in greenPieces) //for each piece that green has check if it can take a red piece
                     {
@@ -682,20 +674,20 @@ namespace Checkers
                         char tmp2 = piece.Name[1];
                         tmp1++;
                         tmp2++;
-                        Button tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                        Button tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                         if (tmp != null)
                         {
                             if (redPieces.Contains(tmp))
                             {
                                 tmp1++;
                                 tmp2++;
-                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one
                                 if (dat != null)
                                 {
                                     if (dat.Content.ToString() == "")
                                     {
                                         piece.Background = Brushes.Blue;
-                                        greenBlue.Add(piece); //computer player not choosing blue square, just choosing square then being checked, make separate check for computer player mb?
+                                        greenBlue.Add(piece);
                                         last = button;
                                         blueExists = true;
                                     }
@@ -707,14 +699,14 @@ namespace Checkers
                         tmp2 = piece.Name[1];
                         tmp1++;
                         tmp2--;
-                        tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                        tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                         if (tmp != null)
                         {
                             if (redPieces.Contains(tmp))
                             {
                                 tmp1++;
                                 tmp2--;
-                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one
                                 if (dat != null)
                                 {
                                     if (dat.Content.ToString() == "")
@@ -733,14 +725,14 @@ namespace Checkers
                             tmp2 = piece.Name[1];
                             tmp1--;
                             tmp2--;
-                            tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                            tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                             if (tmp != null)
                             {
                                 if (redPieces.Contains(tmp))
                                 {
                                     tmp1--;
                                     tmp2--;
-                                    Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                                    Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one
                                     if (dat != null)
                                     {
                                         if (dat.Content.ToString() == "")
@@ -758,14 +750,14 @@ namespace Checkers
                             tmp2 = piece.Name[1];
                             tmp1--;
                             tmp2++;
-                            tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                            tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                             if (tmp != null)
                             {
                                 if (redPieces.Contains(tmp))
                                 {
                                     tmp1--;
                                     tmp2++;
-                                    Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                                    Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one
                                     if (dat != null)
                                     {
                                         if (dat.Content.ToString() == "")
@@ -782,13 +774,13 @@ namespace Checkers
                     }
                     if (blueExists == true)
                     {
-                        if (button.Background == Brushes.Blue)
+                        if (button.Background == Brushes.Blue) //if the current button can take a piece then show the player their options for taking a piece
                         {
                             clickMethod(button);
                         }
                         else
                         {
-                            if (greenSwitch == true)
+                            if (greenSwitch == true) //if the computer player is active then make it select a piece
                             {
                                 ComputerAction();
                             }
@@ -806,12 +798,12 @@ namespace Checkers
 
                 if (blueExists == false)
                 {
-                    DiagReset();
+                    DiagReset(); //reset all the buttons diagonal to the current button
                     char temp1 = bName[0];
                     int temp2 = (int)Char.GetNumericValue(bName[1]);
                     temp1++;
                     temp2--;
-                    diag1 = (Button)FindName(temp1.ToString() + temp2);
+                    diag1 = (Button)FindName(temp1.ToString() + temp2); //find the button diagonal to the current one and add it as a move option
                     if (diag1 != null)
                     {
                         if (diag1.Content.ToString() == "" && diag1.Background != Brushes.Yellow)
@@ -830,7 +822,7 @@ namespace Checkers
                     temp2 = (int)Char.GetNumericValue(bName[1]);
                     temp1++;
                     temp2++;
-                    diag2 = (Button)FindName(temp1.ToString() + temp2);
+                    diag2 = (Button)FindName(temp1.ToString() + temp2); //find the button diagonal to the current one and add it as a move option
                     if (diag2 != null)
                     {
                         if (diag2.Content.ToString() == "" && diag2.Background != Brushes.Yellow)
@@ -852,7 +844,7 @@ namespace Checkers
                         temp2 = (int)Char.GetNumericValue(bName[1]);
                         temp1--;
                         temp2++;
-                        diag3 = (Button)FindName(temp1.ToString() + temp2);
+                        diag3 = (Button)FindName(temp1.ToString() + temp2); //find the button diagonal to the current one and add it as a move option
                         if (diag3 != null)
                         {
                             if (diag3.Content.ToString() == "" && diag3.Background != Brushes.Yellow)
@@ -872,7 +864,7 @@ namespace Checkers
                         temp2 = (int)Char.GetNumericValue(bName[1]);
                         temp1--;
                         temp2--;
-                        diag4 = (Button)FindName(temp1.ToString() + temp2);
+                        diag4 = (Button)FindName(temp1.ToString() + temp2); //find the button diagonal to the current one and add it as a move option
                         if (diag4 != null)
                         {
                             if (diag4.Content.ToString() == "" && diag4.Background != Brushes.Yellow)
@@ -888,7 +880,7 @@ namespace Checkers
 
                         }
                     }
-                    if (greenSwitch == true)
+                    if (greenSwitch == true) //if the computer player is active then if the selected piece can be moved, then move it and reset the list, otherwise make it select again
                     {
                         if (greenYellow.Count != 0 && greenPieces.Contains(button))
                         {
@@ -902,26 +894,24 @@ namespace Checkers
                     }
                 }
             }
-            else if ((button.Foreground == Brushes.Red) && ((turn % 2 == 0) == true)) //REEEEEEEEEEEEEEEEEEEEED
+            else if ((button.Foreground == Brushes.Red) && ((turn % 2 == 0) == true)) //if the selected piece belongs to red and it's their turn
             {
-
-                //IF NO BLUES
-                if (blueExists == false)
+                if (blueExists == false) //if a piece that can take a piece does not exist
                 {
-                    foreach (Button piece in redPieces) //for each piece that red has check if
+                    foreach (Button piece in redPieces) //for each piece that red has check if it can take a green piece
                     {
                         char tmp1 = piece.Name[0];
                         char tmp2 = piece.Name[1];
                         tmp1--;
                         tmp2--;
-                        Button tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                        Button tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                         if (tmp != null)
                         {
                             if (greenPieces.Contains(tmp))
                             {
                                 tmp1--;
                                 tmp2--;
-                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one
                                 if (dat != null)
                                 {
                                     if (dat.Content.ToString() == "")
@@ -939,14 +929,14 @@ namespace Checkers
                         tmp2 = piece.Name[1];
                         tmp1--;
                         tmp2++;
-                        tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                        tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                         if (tmp != null)
                         {
                             if (greenPieces.Contains(tmp))
                             {
                                 tmp1--;
                                 tmp2++;
-                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                                Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one
                                 if (dat != null)
                                 {
                                     if (dat.Content.ToString() == "")
@@ -965,14 +955,14 @@ namespace Checkers
                             tmp2 = piece.Name[1];
                             tmp1++;
                             tmp2++;
-                            tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                            tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                             if (tmp != null)
                             {
                                 if (greenPieces.Contains(tmp))
                                 {
                                     tmp1++;
                                     tmp2++;
-                                    Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                                    Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one
                                     if (dat != null)
                                     {
                                         if (dat.Content.ToString() == "")
@@ -990,14 +980,14 @@ namespace Checkers
                             tmp2 = piece.Name[1];
                             tmp1++;
                             tmp2--;
-                            tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                            tmp = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the current one
                             if (tmp != null)
                             {
                                 if (greenPieces.Contains(tmp))
                                 {
                                     tmp1++;
                                     tmp2--;
-                                    Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString());
+                                    Button dat = (Button)FindName(tmp1.ToString() + tmp2.ToString()); //find the button diagonal to the one diagonal to the current one
                                     if (dat != null)
                                     {
                                         if (dat.Content.ToString() == "")
@@ -1014,13 +1004,13 @@ namespace Checkers
                     }
                     if (blueExists == true)
                     {
-                        if (button.Background == Brushes.Blue)
+                        if (button.Background == Brushes.Blue) //if the current button can take a piece then show the player their options for taking a piece
                         {
                             clickMethod(button);
                         }
                         else
                         {
-                            if (redSwitch == true)
+                            if (redSwitch == true) //if the computer player is active then make it select a piece
                             {
                                 ComputerAction();
                             }
@@ -1038,12 +1028,12 @@ namespace Checkers
 
                 if (blueExists == false)
                 {
-                    DiagReset();
+                    DiagReset(); //reset all buttons that are diagonal to the current button
                     char temp1 = bName[0];
                     int temp2 = (int)Char.GetNumericValue(bName[1]);
                     temp1--;
                     temp2--;
-                    diag1 = (Button)FindName(temp1.ToString() + temp2);
+                    diag1 = (Button)FindName(temp1.ToString() + temp2); //find the button diagonal to the current one and add it as a move option
                     if (diag1 != null)
                     {
                         if (diag1.Content.ToString() == "" && diag1.Background != Brushes.Yellow)
@@ -1062,7 +1052,7 @@ namespace Checkers
                     temp2 = (int)Char.GetNumericValue(bName[1]);
                     temp1--;
                     temp2++;
-                    diag2 = (Button)FindName(temp1.ToString() + temp2);
+                    diag2 = (Button)FindName(temp1.ToString() + temp2); //find the button diagonal to the current one and add it as a move option
                     if (diag2 != null)
                     {
                         if (diag2.Content.ToString() == "" && diag2.Background != Brushes.Yellow)
@@ -1082,7 +1072,7 @@ namespace Checkers
                         temp2 = (int)Char.GetNumericValue(bName[1]);
                         temp1++;
                         temp2++;
-                        diag3 = (Button)FindName(temp1.ToString() + temp2);
+                        diag3 = (Button)FindName(temp1.ToString() + temp2); //find the button diagonal to the current one and add it as a move option
                         if (diag3 != null)
                         {
                             if (diag3.Content.ToString() == "" && diag3.Background != Brushes.Yellow)
@@ -1102,7 +1092,7 @@ namespace Checkers
                         temp2 = (int)Char.GetNumericValue(bName[1]);
                         temp1++;
                         temp2--;
-                        diag4 = (Button)FindName(temp1.ToString() + temp2);
+                        diag4 = (Button)FindName(temp1.ToString() + temp2); //find the button diagonal to the current one and add it as a move option
                         if (diag4 != null)
                         {
                             if (diag4.Content.ToString() == "" && diag4.Background != Brushes.Yellow)
@@ -1118,7 +1108,7 @@ namespace Checkers
 
                         }
                     }
-                    if (redSwitch == true)
+                    if (redSwitch == true) //if the computer player is active then if the selected piece can be moved, then move it and reset the list, otherwise make it select again
                     {
                         if (redYellow.Count != 0 && redPieces.Contains(button))
                         {
@@ -1134,14 +1124,15 @@ namespace Checkers
             }
         }
 
-        private void ComputerAction()
+        private void ComputerAction() //function for making the computer player randomly select pieces
         {
-            if (greenSwitch == true && ((turn % 2 != 0) == true))
+            if (greenSwitch == true && ((turn % 2 == 0) == false)) //if the green computer player is active and if it's their turn
             {
-                if (greenBlue.Count == 0)
+                if (greenBlue.Count == 0) //if no green pieces can take opposing pieces
                 {
+                    //randomly select a green owned button until it can take a valid move from that button
                     Button rand;
-                    System.Threading.Thread.Sleep(50);
+                    System.Threading.Thread.Sleep(50); //note that this is required because of the Random() object being based on the system clock, making it loop infinitely without this pause
                     if (greenPieces.Count != 0)
                     {
                         rand = greenPieces[new Random().Next(0, greenPieces.Count)];
@@ -1156,10 +1147,11 @@ namespace Checkers
                         }
                     }
                 }
-                else
+                else //if there are one or more green pieces that can take opposing pieces then
                 {
+                    //randomly select a piece that can take an opposing piece and force it to take a piece
                     Button rand;
-                    System.Threading.Thread.Sleep(50);
+                    System.Threading.Thread.Sleep(50); //note that this is required because of the Random() object being based on the system clock, making it loop infinitely without this pause
                     rand = greenBlue[new Random().Next(0, greenBlue.Count)];
                     if (greenMoveable.Contains(rand) == false)
                     {
@@ -1173,12 +1165,13 @@ namespace Checkers
                 }
             }
 
-            if (redSwitch == true && ((turn % 2 != 0) == false))
+            if (redSwitch == true && ((turn % 2 == 0) == true)) //if the red computer player is active and if it's their turn
             {
-                if (redBlue.Count == 0)
+                if (redBlue.Count == 0) //if no red pieces can take opposing pieces
                 {
+                    //randomly select a red owned button until it can take a valid move from that button
                     Button rand;
-                    System.Threading.Thread.Sleep(50);
+                    System.Threading.Thread.Sleep(50); //note that this is required because of the Random() object being based on the system clock, making it loop infinitely without this pause
                     if (redPieces.Count != 0)
                     {
                         rand = redPieces[new Random().Next(0, redPieces.Count)];
@@ -1193,10 +1186,11 @@ namespace Checkers
                         }
                     }
                 }
-                else
+                else //if there are one or more red pieces that can take opposing pieces then
                 {
+                    //randomly select a piece that can take an opposing piece and force it to take a piece
                     Button rand;
-                    System.Threading.Thread.Sleep(50);
+                    System.Threading.Thread.Sleep(50); //note that this is required because of the Random() object being based on the system clock, making it loop infinitely without this pause
                     rand = redBlue[new Random().Next(0, redBlue.Count)];
                     if (redMoveable.Contains(rand) == false)
                     {
@@ -1211,52 +1205,48 @@ namespace Checkers
             }
         }
 
-        private void ComputerPlace()
+        private void ComputerPlace() //the computer player function to finalise where a piece is to be moved
         {
-            if (greenSwitch == true && ((turn % 2 == 0) == false))
+            if (greenSwitch == true && ((turn % 2 == 0) == false)) //if the green computer player is active and if it's their turn
             {
+                //randomly select a location that can be moved to and move there
                 Button rand = greenYellow[new Random().Next(0, greenYellow.Count)];
                 System.Threading.Thread.Sleep(50);
-                MessageBox.Show(last.Name + "|" + rand.Name);
+                MessageBox.Show(last.Name + "|" + rand.Name); //display what the move was (for the benefit of spectators mostly)
                 clickMethod(rand);
-                foreach (Button item in greenMoveable.ToList())
-                {
-                    greenMoveable.Remove(item);
-                }
+                greenMoveable = new List<Button>();
             }
-            else if (redSwitch == true && ((turn % 2 == 0) == true))
+            else if (redSwitch == true && ((turn % 2 == 0) == true)) //if the red computer player is active and if it's their turn
             {
+                //randomly select a location that can be moved to and move there
                 Button rand = redYellow[new Random().Next(0, redYellow.Count)];
                 System.Threading.Thread.Sleep(50);
-                MessageBox.Show(last.Name + "|" + rand.Name);
+                MessageBox.Show(last.Name + "|" + rand.Name); //display what the move was (for the benefit of spectators mostly)
                 clickMethod(rand);
-                foreach (Button item in redMoveable.ToList())
-                {
-                    redMoveable.Remove(item);
-                }
+                redMoveable = new List<Button>();
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e) //the event handler for when any of the buttons in the grid are selected
         {
             clickMethod((Button)sender);
         }
 
-        private void vsAI_Click(object sender, RoutedEventArgs e)
+        private void vsAI_Click(object sender, RoutedEventArgs e) //when one of the computer players' buttons are selected
         {
-            if (sender == vsGreenAI)
+            if (sender == vsGreenAI) //if it was the green one, turn it on
             {
                 greenSwitch = true;
                 MessageBox.Show("Green AI On");
             }
-            else if (sender == vsRedAI)
+            else if (sender == vsRedAI) //if it was the red one, turn it on
             {
                 redSwitch = true;
                 MessageBox.Show("Red AI On");
             }
         }
 
-        private void DiagReset()
+        private void DiagReset() //the function used to reset the diagonals of the relevant button
         {
             if (diag1 != null)
             {
@@ -1280,24 +1270,23 @@ namespace Checkers
             diag4 = null;
         }
 
-        private void ReplaySetup()
+        private void ReplaySetup() //called when the load replay button is clicked
         {
-            replay = new Queue<string>();//make this in an if file exists function
-            foreach (string line in System.IO.File.ReadAllLines(inputBox.Text))
+            replay = new Queue<string>();
+            if (System.IO.File.Exists(inputBox.Text) == true && inputBox.Text.Substring(inputBox.Text.Length - 3) == ".rp") //if the file with the name entered and with a .rp extention exists
             {
-                replay.Enqueue(line);
+                foreach (string line in System.IO.File.ReadAllLines(inputBox.Text)) //fill a queue with the contents of the file
+                {
+                    replay.Enqueue(line);
+                }
             }
             CheckersWindow.Hide();
             Replay replayWin = new Replay(replay);
-            replayWin.Show();
+            replayWin.Show(); //show the dedicated replay window
         }
 
-        private void tempSet_Click(object sender, RoutedEventArgs e)
+        private void tempSet_Click(object sender, RoutedEventArgs e) //initialises both sides' lists and if the red computer player is enabled then make it make an action (since red always starts)
         {
-            //if((Button)FindName(button.name[0]--.toString()+button.name[1]--.toString()).content.toString()==O)
-            //Button benjamin = (Button)FindName("A1");
-            //pieces.Add(benjamin);
-            //MessageBox.Show(pieces.Contains(A1).ToString());
             greenPieces.Add(A2);
             greenPieces.Add(A4);
             greenPieces.Add(A6);
